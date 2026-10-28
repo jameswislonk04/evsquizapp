@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BESK508 EVS Quiz Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #11784f;
+  --green-hover: #0d6340;
+  --green-dark: #09472e;
+  --green-light: #e6f6ee;
+  --green-subtle: #f0f9f4;
+  --mint: #e8f7ef;
+  --emerald-border: #b8e4cd;
+  --red: #d32f2f;
+  --red-bg: #fff1f1;
+  --red-border: #f8b4b4;
+  --ink: #14261f;
+  --ink-secondary: #4a5c53;
+  --muted: #6b7f75;
+  --line: #dfe7e2;
+  --paper: #ffffff;
+  --bg: #f5f8f6;
+  --shadow-sm: 0 2px 6px rgba(17, 120, 79, 0.04);
+  --shadow-md: 0 8px 24px -4px rgba(11, 71, 46, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 16px 36px -8px rgba(11, 71, 46, 0.12);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  line-height: 1.55;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  background: linear-gradient(135deg, #09472e 0%, #11784f 60%, #189865 100%);
+  color: white;
+  padding: 40px 20px 48px;
+  position: relative;
+  overflow: hidden;
+}
+header::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.wrap { max-width: 1140px; margin: auto; padding: 0 20px; }
+.hero { display: flex; gap: 32px; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.brand {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a3e9c5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero h1 {
+  font-size: clamp(30px, 4.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 10px 0 12px;
+}
+.hero p {
+  color: #d6f2e2;
+  font-size: 16px;
+  max-width: 640px;
+  line-height: 1.6;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 18px;
+  color: #fff;
+}
+.hero-icon {
+  font-size: 80px;
+  opacity: 0.88;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.15));
+  user-select: none;
+}
+
+main { padding: 32px 0 60px; }
+
+/* Stat Bar */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+.stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: var(--transition);
+}
+.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--emerald-border); }
+.stat strong {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1.2;
+}
+.stat span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* Layout */
+.layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+.panel, .question-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.panel {
+  padding: 24px;
+  position: sticky;
+  top: 20px;
+}
+.panel h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.field { margin-bottom: 18px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-secondary);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+select, input[type=search] {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+select:focus, input[type=search]:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(17, 120, 79, 0.15);
+}
+.checks { display: grid; gap: 10px; }
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.check input {
+  margin-top: 2px;
+  accent-color: var(--green);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: var(--green);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(17, 120, 79, 0.25);
+  transition: var(--transition);
+}
+.btn:hover:not(:disabled) {
+  background: var(--green-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(17, 120, 79, 0.35);
+}
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn.secondary {
+  background: var(--green-subtle);
+  color: var(--green-dark);
+  border: 1.5px solid var(--emerald-border);
+  box-shadow: none;
+}
+.btn.secondary:hover:not(:disabled) {
+  background: var(--mint);
+  border-color: var(--green);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+/* Quiz Section */
+.question-card {
+  padding: 34px 36px;
+  position: relative;
+}
+.quiz-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--green-dark);
+  background: var(--green-light);
+  border: 1px solid var(--emerald-border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  letter-spacing: .02em;
+}
+.q-number {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+}
+.progress {
+  height: 8px;
+  background: #e9eee9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 16px 0 24px;
+}
+.progress div {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #189865, var(--green));
+  border-radius: 999px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.question-card h2 {
+  font-size: clamp(20px, 2.3vw, 25px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.options { display: grid; gap: 11px; }
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  transition: var(--transition);
+}
+.option:hover:not(:disabled) {
+  border-color: #83cca5;
+  background: #fafdfb;
+  transform: translateX(3px);
+}
+.letter {
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #f0f4f1;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  transition: var(--transition);
+}
+.option.correct {
+  border-color: #1d9a5b !important;
+  background: #ebfaf1 !important;
+  color: #0b553a !important;
+  font-weight: 600;
+}
+.option.correct .letter {
+  background: #1d9a5b;
+  color: white;
+}
+.option.wrong {
+  border-color: #e57373 !important;
+  background: var(--red-bg) !important;
+  color: #991b1b !important;
+}
+.option.wrong .letter {
+  background: #d32f2f;
+  color: white;
+}
+.option:disabled { cursor: default; }
+
+.feedback {
+  display: none;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-top: 20px;
+  line-height: 1.55;
+  font-size: 14px;
+}
+.feedback.show { display: block; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.feedback.good {
+  background: var(--green-subtle);
+  border: 1px solid var(--emerald-border);
+  color: var(--green-dark);
+}
+.feedback.bad {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  color: #8b1d1d;
+}
+.feedback strong { display: block; margin-bottom: 6px; font-size: 15px; }
+
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.bottom-nav .btn { min-width: 140px; }
+
+/* Result screen */
+.result { display: none; text-align: center; padding: 48px 30px; }
+.result.show { display: block; }
+.result .big {
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--green);
+  line-height: 1;
+  margin: 18px 0 10px;
+  letter-spacing: -0.04em;
+}
+.result h2 { font-size: 26px; font-weight: 800; margin-bottom: 10px; color: var(--ink); }
+.result p { color: var(--muted); max-width: 500px; margin: 0 auto 26px; }
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 30px 18px 40px;
+}
+
+@media(max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .panel { order: 2; position: static; }
+  .quiz-area { order: 1; }
+  .question-card { padding: 24px 20px; }
+}
+@media(max-width: 540px) {
+  header { padding: 30px 16px 40px; }
+  .hero-icon { display: none; }
+  .stats { gap: 8px; }
+  .stat { padding: 12px; }
+  .stat strong { font-size: 22px; }
+  .bottom-nav .btn { flex: 1; min-width: 0; padding: 12px 10px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <div class="brand"><span>🌱</span> BESK508 · Study & practice</div>
+      <h1>EVS Quiz Lab</h1>
+      <p>Module-wise practice covering Environmental Studies, E-Waste Management, natural resources, pollution, and UN Sustainable Development Goals.</p>
+      <div class="pill">✓ Unlimited time · Instant feedback · Keyboard accessible</div>
+    </div>
+    <div class="hero-icon" aria-hidden="true">♻</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats">
+    <div class="stat"><strong id="totalStat">—</strong><span>Questions in bank</span></div>
+    <div class="stat"><strong id="accuracyStat">0%</strong><span>Accuracy</span></div>
+    <div class="stat"><strong id="scoreStat">0</strong><span>Correct this session</span></div>
+  </div>
+
+  <div class="layout">
+    <aside class="panel">
+      <h2>Build your practice</h2>
+      
+      <div class="field">
+        <label for="module">Choose module</label>
+        <select id="module">
+          <option value="All">All modules</option>
+          <option value="Module 1">Module 1 · Environment & Sustainability</option>
+          <option value="Module 2">Module 2 · Natural Resources & Energy</option>
+          <option value="Module 3">Module 3 · Pollution & Global Issues</option>
+          <option value="Sample Quiz">Sample quiz paper</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="mode">Question order</label>
+        <select id="mode">
+          <option value="all">All questions in selected module</option>
+          <option value="20">Practice set · 20 questions</option>
+          <option value="10">Quick revision · 10 questions</option>
+          <option value="random">Random practice · 20 questions</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="search">Find a topic</label>
+        <input type="search" id="search" placeholder="e.g., fluorosis, BOD, Kyoto">
+      </div>
+
+      <div class="field">
+        <label>Settings</label>
+        <div class="checks">
+          <label class="check">
+            <input type="checkbox" id="shuffle"> 
+            <span>Shuffle question order</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="startBtn">Start quiz</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
+      </div>
+
+      <p class="hint"><strong>Shortcuts:</strong> Press <kbd>A</kbd>, <kbd>B</kbd>, <kbd>C</kbd>, or <kbd>D</kbd> to select an answer. Use <kbd>→</kbd> / <kbd>Enter</kbd> to advance.</p>
+    </aside>
+
+    <section class="quiz-area">
+      <div class="question-card" id="quizCard">
+        <div class="quiz-top">
+          <span class="tag" id="moduleTag">Ready to practice</span>
+          <span class="q-number" id="counter">Choose a module</span>
+        </div>
+        <div class="progress"><div id="progressBar"></div></div>
+        
+        <h2 id="prompt">Select a module and press “Start quiz” when you're ready.</h2>
+        <div id="options" class="options"></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        
+        <div class="bottom-nav">
+          <button class="btn secondary" id="prevBtn" disabled>← Previous</button>
+          <button class="btn" id="nextBtn" disabled>Next question →</button>
+        </div>
+      </div>
+
+      <div class="question-card result" id="resultCard">
+        <div class="tag">Practice complete</div>
+        <div class="big" id="finalScore">0 / 0</div>
+        <h2 id="resultTitle">Well done!</h2>
+        <p id="resultText"></p>
+        <div class="btn-row" style="justify-content:center">
+          <button class="btn" id="againBtn">Practice again</button>
+          <button class="btn secondary" id="reviewBtn">Review mistakes</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>Built from BESK508 EVS Courseware. Answers strictly align with provided course MCQ keys.</footer>
+
+<script>
+// Clean raw questions that have embedded multiple choice letters (e.g. "What is water? a) 50% b) 30% ...")
+const cleanPrompt = (q) => q.replace(/\s*[a-d]\)\s*.*$/i, '').trim();
+
+const RAW_BANK = [
+  {"module": "Module 1", "question": "What are the two main components of the environment?", "options": [{"key": "A", "text": "Water and Air"}, {"key": "B", "text": "Biotic and Abiotic"}, {"key": "C", "text": "Plants and Animals"}, {"key": "D", "text": "Soil and Water"}], "answer": "B"},
+  {"module": "Module 1", "question": "The layer of gases surrounding the Earth is called the:", "options": [{"key": "A", "text": "Lithosphere"}, {"key": "B", "text": "Hydrosphere"}, {"key": "C", "text": "Atmosphere"}, {"key": "D", "text": "Biosphere"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following is a biotic component?", "options": [{"key": "A", "text": "Sunlight"}, {"key": "B", "text": "Water"}, {"key": "C", "text": "Bacteria"}, {"key": "D", "text": "Rocks"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following is NOT an abiotic component?", "options": [{"key": "A", "text": "Temperature"}, {"key": "B", "text": "Air"}, {"key": "C", "text": "Plant"}, {"key": "D", "text": "Water"}], "answer": "C"},
+  {"module": "Module 1", "question": "What is the basic functional unit of the environment?", "options": [{"key": "A", "text": "Biosphere"}, {"key": "B", "text": "Ecosystem"}, {"key": "C", "text": "Biome"}, {"key": "D", "text": "Population"}], "answer": "B"},
+  {"module": "Module 1", "question": "The term \"ecosystem\" was coined by:", "options": [{"key": "A", "text": "Charles Darwin"}, {"key": "B", "text": "A.G. Tansley"}, {"key": "C", "text": "Rachel Carson"}, {"key": "D", "text": "M.S. Swaminathan"}], "answer": "B"},
+  {"module": "Module 1", "question": "The producers in an ecosystem are:", "options": [{"key": "A", "text": "Herbivores"}, {"key": "B", "text": "Carnivores"}, {"key": "C", "text": "Green Plants"}, {"key": "D", "text": "Fungi"}], "answer": "C"},
+  {"module": "Module 1", "question": "What is the role of decomposers in an ecosystem?", "options": [{"key": "A", "text": "Produce food"}, {"key": "B", "text": "Consume herbivores"}, {"key": "C", "text": "Break down dead organisms"}, {"key": "D", "text": "Absorb sunlight"}], "answer": "C"},
+  {"module": "Module 1", "question": "In an ecosystem, energy flows in which direction?", "options": [{"key": "A", "text": "From carnivores to producers"}, {"key": "B", "text": "From decomposers to consumers"}, {"key": "C", "text": "From producers to consumers"}, {"key": "D", "text": "Randomly"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following ecosystems is terrestrial?", "options": [{"key": "A", "text": "Ocean"}, {"key": "B", "text": "Lake"}, {"key": "C", "text": "Forest"}, {"key": "D", "text": "Coral reef"}], "answer": "C"},
+  {"module": "Module 1", "question": "The biosphere includes:", "options": [{"key": "A", "text": "Only land"}, {"key": "B", "text": "Only air"}, {"key": "C", "text": "Only water"}, {"key": "D", "text": "Land, air, and water with life"}], "answer": "D"},
+  {"module": "Module 1", "question": "Hydrosphere refers to:", "options": [{"key": "A", "text": "Water bodies"}, {"key": "B", "text": "Soil"}, {"key": "C", "text": "Air"}, {"key": "D", "text": "Living organisms"}], "answer": "A"},
+  {"module": "Module 1", "question": "An example of an aquatic ecosystem is:", "options": [{"key": "A", "text": "Desert"}, {"key": "B", "text": "River"}, {"key": "C", "text": "Grassland"}, {"key": "D", "text": "Forest"}], "answer": "B"},
+  {"module": "Module 1", "question": "The non-living components of an ecosystem are collectively known as:", "options": [{"key": "A", "text": "Biotic"}, {"key": "B", "text": "Abiotic"}, {"key": "C", "text": "Ecological"}, {"key": "D", "text": "Organic"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which of the following is a characteristic of ecosystems?", "options": [{"key": "A", "text": "Energy cycling only"}, {"key": "B", "text": "Nutrient flow only"}, {"key": "C", "text": "Dynamic balance of all components"}, {"key": "D", "text": "Only biotic interactions"}], "answer": "C"},
+  {"module": "Module 1", "question": "What is the correct sequence of ecosystem structure?", "options": [{"key": "A", "text": "Organism → Population → Community → Ecosystem"}, {"key": "B", "text": "Population → Organism → Ecosystem → Community"}, {"key": "C", "text": "Community → Ecosystem → Organism → Population"}, {"key": "D", "text": "Organism → Ecosystem → Community → Population"}], "answer": "A"},
+  {"module": "Module 1", "question": "Which of the following defines ecosystem structure?", "options": [{"key": "A", "text": "Only the living organisms"}, {"key": "B", "text": "Only physical components"}, {"key": "C", "text": "Composition of both biotic and abiotic elements"}, {"key": "D", "text": "Interaction between two species"}], "answer": "C"},
+  {"module": "Module 1", "question": "The function of an ecosystem refers to:", "options": [{"key": "A", "text": "Energy flow and nutrient cycling"}, {"key": "B", "text": "Only rainfall"}, {"key": "C", "text": "Only photosynthesis"}, {"key": "D", "text": "Presence of large carnivores"}], "answer": "A"},
+  {"module": "Module 1", "question": "Primary productivity in an ecosystem refers to:", "options": [{"key": "A", "text": "Energy lost as heat"}, {"key": "B", "text": "Total biomass consumed"}, {"key": "C", "text": "The rate of solar energy conversion into chemical energy by producers"}, {"key": "D", "text": "Recycled energy"}], "answer": "C"},
+  {"module": "Module 1", "question": "In a forest ecosystem, the main producers are:", "options": [{"key": "A", "text": "Algae"}, {"key": "B", "text": "Grass"}, {"key": "C", "text": "Phytoplankton"}, {"key": "D", "text": "Trees"}], "answer": "D"},
+  {"module": "Module 1", "question": "Which one of the following is NOT a component of ecosystem function?", "options": [{"key": "A", "text": "Energy flow"}, {"key": "B", "text": "Nutrient cycling"}, {"key": "C", "text": "Temperature change"}, {"key": "D", "text": "Decomposition"}], "answer": "C"},
+  {"module": "Module 1", "question": "A climax community in forest ecosystems represents:", "options": [{"key": "A", "text": "Early stage of forest development"}, {"key": "B", "text": "Stable and mature ecological stage"}, {"key": "C", "text": "Disturbed ecosystem"}, {"key": "D", "text": "Only shrubs and grasses"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which of the following is a man-made ecosystem?", "options": [{"key": "A", "text": "Tropical rainforest"}, {"key": "B", "text": "Desert"}, {"key": "C", "text": "Wetland"}, {"key": "D", "text": "Agricultural field"}], "answer": "D"},
+  {"module": "Module 1", "question": "Wetlands are known for their ability to:", "options": [{"key": "A", "text": "Produce fossil fuels"}, {"key": "B", "text": "Filter pollutants and support biodiversity"}, {"key": "C", "text": "Increase desertification"}, {"key": "D", "text": "Reduce aquatic life"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which of the following is NOT a type of forest ecosystem?", "options": [{"key": "A", "text": "Tropical rainforest"}, {"key": "B", "text": "Coniferous forest"}, {"key": "C", "text": "Urban forest"}, {"key": "D", "text": "Desert scrub"}], "answer": "D"},
+  {"module": "Module 1", "question": "Wetlands play a vital role in flood control by:", "options": [{"key": "A", "text": "Absorbing excess water during rains"}, {"key": "B", "text": "Creating more rainfall"}, {"key": "C", "text": "Blocking water completely"}, {"key": "D", "text": "None of the above"}], "answer": "A"},
+  {"module": "Module 1", "question": "Which species is commonly found in Indian mangrove wetlands?", "options": [{"key": "A", "text": "Cactus"}, {"key": "B", "text": "Rhizophora"}, {"key": "C", "text": "Bamboo"}, {"key": "D", "text": "Pine"}], "answer": "B"},
+  {"module": "Module 1", "question": "Peatlands, swamps, and marshes are examples of:", "options": [{"key": "A", "text": "Forest ecosystems"}, {"key": "B", "text": "Desert ecosystems"}, {"key": "C", "text": "Wetland ecosystems"}, {"key": "D", "text": "Grassland ecosystems"}], "answer": "C"},
+  {"module": "Module 1", "question": "Forests help mitigate climate change by:", "options": [{"key": "A", "text": "Emitting greenhouse gases"}, {"key": "B", "text": "Cutting oxygen supply"}, {"key": "C", "text": "Storing carbon through photosynthesis"}, {"key": "D", "text": "Raising temperatures"}], "answer": "C"},
+  {"module": "Module 1", "question": "Wetlands are important for migratory birds because:", "options": [{"key": "A", "text": "They offer no predators"}, {"key": "B", "text": "They are dry and open"}, {"key": "C", "text": "They provide nesting and feeding grounds"}, {"key": "D", "text": "They have artificial shelters"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following best describes a river ecosystem?", "options": [{"key": "A", "text": "Static freshwater system"}, {"key": "B", "text": "Flowing freshwater system with lotic characteristics"}, {"key": "C", "text": "Standing saltwater body"}, {"key": "D", "text": "Underground water system"}], "answer": "B"},
+  {"module": "Module 1", "question": "The zone in a lake where light does not penetrate is called the:", "options": [{"key": "A", "text": "Littoral zone"}, {"key": "B", "text": "Limnetic zone"}, {"key": "C", "text": "Profundal zone"}, {"key": "D", "text": "Pelagic zone"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following organisms is dominant in oceanic ecosystems?", "options": [{"key": "A", "text": "Bryophytes"}, {"key": "B", "text": "Phytoplankton"}, {"key": "C", "text": "Earthworms"}, {"key": "D", "text": "Cacti"}], "answer": "B"},
+  {"module": "Module 1", "question": "Ocean currents influence:", "options": [{"key": "A", "text": "Soil texture only"}, {"key": "B", "text": "Weather and climate patterns globally"}, {"key": "C", "text": "Only tidal waves"}, {"key": "D", "text": "Human emotions"}], "answer": "B"},
+  {"module": "Module 1", "question": "In a river ecosystem, the major source of primary productivity is:", "options": [{"key": "A", "text": "Zooplankton"}, {"key": "B", "text": "Phytoplankton and aquatic plants"}, {"key": "C", "text": "Fungi"}, {"key": "D", "text": "Sand particles"}], "answer": "B"},
+  {"module": "Module 1", "question": "Lake ecosystems are typically classified as:", "options": [{"key": "A", "text": "Marine ecosystems"}, {"key": "B", "text": "Terrestrial ecosystems"}, {"key": "C", "text": "Lentic freshwater ecosystems"}, {"key": "D", "text": "Lotic saltwater ecosystems"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which of the following is a major abiotic factor in oceanic ecosystems?", "options": [{"key": "A", "text": "Temperature and salinity"}, {"key": "B", "text": "Bird migration"}, {"key": "C", "text": "Tree canopy"}, {"key": "D", "text": "Fungi diversity"}], "answer": "A"},
+  {"module": "Module 1", "question": "Eutrophication in lakes is primarily caused by:", "options": [{"key": "A", "text": "High oxygen content"}, {"key": "B", "text": "Excessive nutrient loading from agricultural runoff"}, {"key": "C", "text": "Presence of pebbles and stones"}, {"key": "D", "text": "Low sunlight"}], "answer": "B"},
+  {"module": "Module 1", "question": "The topmost layer in a lake where photosynthesis actively occurs is known as the:", "options": [{"key": "A", "text": "Aphotic zone"}, {"key": "B", "text": "Profundal zone"}, {"key": "C", "text": "Euphotic zone"}, {"key": "D", "text": "Benthic zone"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which marine zone supports the most biodiversity?", "options": [{"key": "A", "text": "Abyssal zone"}, {"key": "B", "text": "Neritic zone"}, {"key": "C", "text": "Hadal zone"}, {"key": "D", "text": "Benthic zone"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which river in India is considered to have one of the most diverse freshwater ecosystems?", "options": [{"key": "A", "text": "Sabarmati"}, {"key": "B", "text": "Narmada"}, {"key": "C", "text": "Yamuna"}, {"key": "D", "text": "Ganga"}], "answer": "D"},
+  {"module": "Module 1", "question": "Ocean acidification is primarily due to:", "options": [{"key": "A", "text": "Increase in dissolved nitrogen"}, {"key": "B", "text": "Increase in CO₂ absorption"}, {"key": "C", "text": "Oil spills"}, {"key": "D", "text": "Overfishing"}], "answer": "B"},
+  {"module": "Module 1", "question": "Lakes that mix water from top to bottom only once a year are called:", "options": [{"key": "A", "text": "Meromictic lakes"}, {"key": "B", "text": "Polymictic lakes"}, {"key": "C", "text": "Monomictic lakes"}, {"key": "D", "text": "Dimictic lakes"}], "answer": "C"},
+  {"module": "Module 1", "question": "The river ecosystem is vital for:", "options": [{"key": "A", "text": "Absorbing carbon monoxide"}, {"key": "B", "text": "Polluting groundwater"}, {"key": "C", "text": "Recharging aquifers and sustaining biodiversity"}, {"key": "D", "text": "Salinizing farmland"}], "answer": "C"},
+  {"module": "Module 1", "question": "The term \"brackish water\" typically refers to:", "options": [{"key": "A", "text": "Pure saltwater"}, {"key": "B", "text": "Pure freshwater"}, {"key": "C", "text": "Water with mixed salt and freshwater characteristics"}, {"key": "D", "text": "Contaminated sewage water"}], "answer": "C"},
+  {"module": "Module 1", "question": "What does SDG stand for?", "options": [{"key": "A", "text": "Sustainable Development Goals"}, {"key": "B", "text": "Social Development Guide"}, {"key": "C", "text": "Standard Development Goals"}, {"key": "D", "text": "Sustainable Diversity Goals"}], "answer": "A"},
+  {"module": "Module 1", "question": "How many Sustainable Development Goals (SDGs) are defined by the United Nations?", "options": [{"key": "A", "text": "10"}, {"key": "B", "text": "15"}, {"key": "C", "text": "17"}, {"key": "D", "text": "20"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which SDG focuses on clean water and sanitation?", "options": [{"key": "A", "text": "SDG 4"}, {"key": "B", "text": "SDG 6"}, {"key": "C", "text": "SDG 10"}, {"key": "D", "text": "SDG 13"}], "answer": "B"},
+  {"module": "Module 1", "question": "The target year for achieving the 17 SDGs is:", "options": [{"key": "A", "text": "2025"}, {"key": "B", "text": "2030"}, {"key": "C", "text": "2050"}, {"key": "D", "text": "2040"}], "answer": "B"},
+  {"module": "Module 1", "question": "SDG 13 deals with:", "options": [{"key": "A", "text": "Industry, Innovation and Infrastructure"}, {"key": "B", "text": "Clean Energy"}, {"key": "C", "text": "Climate Action"}, {"key": "D", "text": "No Poverty"}], "answer": "C"},
+  {"module": "Module 1", "question": "Which SDG aims to end hunger and achieve food security?", "options": [{"key": "A", "text": "SDG 1"}, {"key": "B", "text": "SDG 2"}, {"key": "C", "text": "SDG 5"}, {"key": "D", "text": "SDG 3"}], "answer": "B"},
+  {"module": "Module 1", "question": "\"Affordable and Clean Energy\" is the goal of:", "options": [{"key": "A", "text": "SDG 4"}, {"key": "B", "text": "SDG 7"}, {"key": "C", "text": "SDG 12"}, {"key": "D", "text": "SDG 17"}], "answer": "B"},
+  {"module": "Module 1", "question": "The principle of sustainability focuses on:", "options": [{"key": "A", "text": "Immediate profits"}, {"key": "B", "text": "Balanced development of environment, society, and economy"}, {"key": "C", "text": "Political power"}, {"key": "D", "text": "Population growth"}], "answer": "B"},
+  {"module": "Module 1", "question": "SDG 12 aims at:", "options": [{"key": "A", "text": "Clean water for all"}, {"key": "B", "text": "Responsible consumption and production"}, {"key": "C", "text": "Zero hunger"}, {"key": "D", "text": "Quality education"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which of the following is an action to achieve SDG 13 (Climate Action)?", "options": [{"key": "A", "text": "Increase fossil fuel subsidies"}, {"key": "B", "text": "Promote solar and wind energy"}, {"key": "C", "text": "Deforestation"}, {"key": "D", "text": "Build more thermal power plants"}], "answer": "B"},
+  {"module": "Module 1", "question": "Gender equality is addressed in which SDG?", "options": [{"key": "A", "text": "SDG 2"}, {"key": "B", "text": "SDG 5"}, {"key": "C", "text": "SDG 11"}, {"key": "D", "text": "SDG 15"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which SDG promotes inclusive and quality education?", "options": [{"key": "A", "text": "SDG 3"}, {"key": "B", "text": "SDG 4"}, {"key": "C", "text": "SDG 8"}, {"key": "D", "text": "SDG 10"}], "answer": "B"},
+  {"module": "Module 1", "question": "\"Life Below Water\" is the focus of:", "options": [{"key": "A", "text": "SDG 14"}, {"key": "B", "text": "SDG 12"}, {"key": "C", "text": "SDG 9"}, {"key": "D", "text": "SDG 6"}], "answer": "A"},
+  {"module": "Module 1", "question": "Partnerships for the goals are discussed in:", "options": [{"key": "A", "text": "SDG 17"}, {"key": "B", "text": "SDG 1"}, {"key": "C", "text": "SDG 11"}, {"key": "D", "text": "SDG 15"}], "answer": "A"},
+  {"module": "Module 1", "question": "Which of the following is not a sustainability principle?", "options": [{"key": "A", "text": "Intergenerational equity"}, {"key": "B", "text": "Economic development only"}, {"key": "C", "text": "Environmental protection"}, {"key": "D", "text": "Social inclusion"}], "answer": "B"},
+  {"module": "Module 1", "question": "The term \"sustainable development\" was popularized by which report?", "options": [{"key": "A", "text": "Kyoto Protocol"}, {"key": "B", "text": "Brundtland Report"}, {"key": "C", "text": "Montreal Protocol"}, {"key": "D", "text": "Rio Declaration"}], "answer": "B"},
+  {"module": "Module 1", "question": "Which of these is a social sustainability indicator?", "options": [{"key": "A", "text": "CO₂ emissions"}, {"key": "B", "text": "Literacy rate"}, {"key": "C", "text": "Forest cover"}, {"key": "D", "text": "GDP"}], "answer": "B"},
+  {"module": "Module 1", "question": "SDG 11 is related to:", "options": [{"key": "A", "text": "Life on land"}, {"key": "B", "text": "Smart cities and communities"}, {"key": "C", "text": "Innovation and technology"}, {"key": "D", "text": "Zero poverty"}], "answer": "B"},
+  {"module": "Module 1", "question": "Possible actions to support SDG 6 include:", "options": [{"key": "A", "text": "Promoting water wastage"}, {"key": "B", "text": "Building open drains"}, {"key": "C", "text": "Reusing and conserving water"}, {"key": "D", "text": "Ignoring sewage treatment"}], "answer": "C"},
+  {"module": "Module 1", "question": "One major goal of SDG 15 (Life on Land) is to:", "options": [{"key": "A", "text": "Promote urbanisation"}, {"key": "B", "text": "Prevent overfishing"}, {"key": "C", "text": "Combat desertification and halt biodiversity loss"}, {"key": "D", "text": "Increase mining operations"}], "answer": "C"},
+  {"module": "Module 2", "question": "What percentage of Earth's water is freshwater?", "options": [{"key": "A", "text": "50%"}, {"key": "B", "text": "30%"}, {"key": "C", "text": "2.5%"}, {"key": "D", "text": "10%"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which river is not part of the Indian river system?", "options": [{"key": "A", "text": "Ganga"}, {"key": "B", "text": "Nile"}, {"key": "C", "text": "Krishna"}, {"key": "D", "text": "Godavari"}], "answer": "B"},
+  {"module": "Module 2", "question": "The ideal pH of drinking water should be:", "options": [{"key": "A", "text": "5.5"}, {"key": "B", "text": "6.5–8.5"}, {"key": "C", "text": "9.0"}, {"key": "D", "text": "10.5"}], "answer": "B"},
+  {"module": "Module 2", "question": "Which parameter indicates the presence of organic pollutants in water?", "options": [{"key": "A", "text": "DO"}, {"key": "B", "text": "BOD"}, {"key": "C", "text": "COD"}, {"key": "D", "text": "TDS"}], "answer": "B"},
+  {"module": "Module 2", "question": "Which technique helps conserve groundwater by collecting rooftop water?", "options": [{"key": "A", "text": "Desalination"}, {"key": "B", "text": "Distillation"}, {"key": "C", "text": "Rainwater Harvesting"}, {"key": "D", "text": "Filtration"}], "answer": "C"},
+  {"module": "Module 2", "question": "Eutrophication is mainly caused by:", "options": [{"key": "A", "text": "Excess salt"}, {"key": "B", "text": "Organic matter"}, {"key": "C", "text": "Nutrient runoff"}, {"key": "D", "text": "Industrial effluents"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which organization is responsible for water pollution control in India?", "options": [{"key": "A", "text": "NDMA"}, {"key": "B", "text": "CPCB"}, {"key": "C", "text": "ISRO"}, {"key": "D", "text": "FCI"}], "answer": "B"},
+  {"module": "Module 2", "question": "The permissible TDS in drinking water is:", "options": [{"key": "A", "text": "1000 mg/L"}, {"key": "B", "text": "2000 mg/L"}, {"key": "C", "text": "500 mg/L"}, {"key": "D", "text": "50 mg/L"}], "answer": "C"},
+  {"module": "Module 2", "question": "Thermal pollution is associated with:", "options": [{"key": "A", "text": "Oil spills"}, {"key": "B", "text": "Domestic sewage"}, {"key": "C", "text": "Power plants"}, {"key": "D", "text": "Agriculture"}], "answer": "C"},
+  {"module": "Module 2", "question": "Drip irrigation is effective for:", "options": [{"key": "A", "text": "Reducing evaporation losses"}, {"key": "B", "text": "Flood control"}, {"key": "C", "text": "Power generation"}, {"key": "D", "text": "Filtration"}], "answer": "A"},
+  {"module": "Module 2", "question": "Which of the following acts governs water pollution in India?", "options": [{"key": "A", "text": "Water Act, 1974"}, {"key": "B", "text": "Forest Act, 1980"}, {"key": "C", "text": "Environment Act, 1986"}, {"key": "D", "text": "Biodiversity Act, 2002"}], "answer": "A"},
+  {"module": "Module 2", "question": "What is the process of adding chlorine to water called?", "options": [{"key": "A", "text": "Filtration"}, {"key": "B", "text": "Sedimentation"}, {"key": "C", "text": "Chlorination"}, {"key": "D", "text": "Coagulation"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which state pioneered rooftop rainwater harvesting?", "options": [{"key": "A", "text": "Tamil Nadu"}, {"key": "B", "text": "Rajasthan"}, {"key": "C", "text": "Gujarat"}, {"key": "D", "text": "Kerala"}], "answer": "A"},
+  {"module": "Module 2", "question": "What does BOD stand for?", "options": [{"key": "A", "text": "Biological Organism Demand"}, {"key": "B", "text": "Biodegradable Oxygen Demand"}, {"key": "C", "text": "Biochemical Oxygen Demand"}, {"key": "D", "text": "Biological Oxygen Division"}], "answer": "C"},
+  {"module": "Module 2", "question": "Groundwater depletion is caused by:", "options": [{"key": "A", "text": "Dams"}, {"key": "B", "text": "Desalination"}, {"key": "C", "text": "Over-irrigation"}, {"key": "D", "text": "Sewage treatment"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of these is not a source of groundwater pollution?", "options": [{"key": "A", "text": "Septic tanks"}, {"key": "B", "text": "Leaky landfills"}, {"key": "C", "text": "Industrial injection wells"}, {"key": "D", "text": "Air pollution"}], "answer": "D"},
+  {"module": "Module 2", "question": "Which method is not used for wastewater treatment?", "options": [{"key": "A", "text": "Filtration"}, {"key": "B", "text": "Activated sludge process"}, {"key": "C", "text": "Reverse osmosis"}, {"key": "D", "text": "Acidification"}], "answer": "D"},
+  {"module": "Module 2", "question": "Which form of water resource is most accessible to humans?", "options": [{"key": "A", "text": "Glacial ice"}, {"key": "B", "text": "Ocean water"}, {"key": "C", "text": "Groundwater"}, {"key": "D", "text": "Atmospheric water"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following is not a use of water?", "options": [{"key": "A", "text": "Irrigation"}, {"key": "B", "text": "Cooking"}, {"key": "C", "text": "Internet surfing"}, {"key": "D", "text": "Hydropower"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which cycle describes the movement of water through evaporation, precipitation, and runoff?", "options": [{"key": "A", "text": "Carbon Cycle"}, {"key": "B", "text": "Nitrogen Cycle"}, {"key": "C", "text": "Water Cycle"}, {"key": "D", "text": "Oxygen Cycle"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following is a major cause of water-borne diseases?", "options": [{"key": "A", "text": "Clean drinking water"}, {"key": "B", "text": "Contaminated water"}, {"key": "C", "text": "Boiled water"}, {"key": "D", "text": "Distilled water"}], "answer": "B"},
+  {"module": "Module 2", "question": "Cholera is caused by which microorganism?", "options": [{"key": "A", "text": "Escherichia coli"}, {"key": "B", "text": "Salmonella typhi"}, {"key": "C", "text": "Vibrio cholerae"}, {"key": "D", "text": "Plasmodium vivax"}], "answer": "C"},
+  {"module": "Module 2", "question": "What is the primary symptom of typhoid fever?", "options": [{"key": "A", "text": "Joint pain"}, {"key": "B", "text": "High fever"}, {"key": "C", "text": "Rashes"}, {"key": "D", "text": "Headache only"}], "answer": "B"},
+  {"module": "Module 2", "question": "Which of the following water-borne diseases is caused by a virus?", "options": [{"key": "A", "text": "Hepatitis A"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Cholera"}, {"key": "D", "text": "Dysentery"}], "answer": "A"},
+  {"module": "Module 2", "question": "What is the primary mode of prevention for water-borne diseases?", "options": [{"key": "A", "text": "Vaccination only"}, {"key": "B", "text": "Drinking carbonated beverages"}, {"key": "C", "text": "Drinking safe and clean water"}, {"key": "D", "text": "Eating spicy food"}], "answer": "C"},
+  {"module": "Module 2", "question": "Dental fluorosis affects which part of the body?", "options": [{"key": "A", "text": "Liver"}, {"key": "B", "text": "Bones"}, {"key": "C", "text": "Teeth"}, {"key": "D", "text": "Heart"}], "answer": "C"},
+  {"module": "Module 2", "question": "The safe limit of fluoride in drinking water as per WHO is:", "options": [{"key": "A", "text": "5 ppm"}, {"key": "B", "text": "3 ppm"}, {"key": "C", "text": "1.5 ppm"}, {"key": "D", "text": "0.1 ppm"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which technique is commonly used for defluoridation in rural India?", "options": [{"key": "A", "text": "Boiling"}, {"key": "B", "text": "Distillation"}, {"key": "C", "text": "Nalgonda technique"}, {"key": "D", "text": "Filtration with sand"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following is NOT a symptom of skeletal fluorosis?", "options": [{"key": "A", "text": "Joint pain"}, {"key": "B", "text": "Soft bones"}, {"key": "C", "text": "Skin rashes"}, {"key": "D", "text": "Bone deformities"}], "answer": "C"},
+  {"module": "Module 2", "question": "Guinea worm disease is caused by:", "options": [{"key": "A", "text": "Virus"}, {"key": "B", "text": "Bacteria"}, {"key": "C", "text": "Protozoa"}, {"key": "D", "text": "Helminth (worm)"}], "answer": "D"},
+  {"module": "Module 2", "question": "Which of these states is highly affected by fluoride contamination?", "options": [{"key": "A", "text": "Kerala"}, {"key": "B", "text": "Punjab"}, {"key": "C", "text": "Rajasthan"}, {"key": "D", "text": "Jammu & Kashmir"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which nutrient reduces fluoride absorption in the human body?", "options": [{"key": "A", "text": "Vitamin A"}, {"key": "B", "text": "Calcium"}, {"key": "C", "text": "Iron"}, {"key": "D", "text": "Sodium"}], "answer": "B"},
+  {"module": "Module 2", "question": "Which of the following water-borne diseases causes jaundice?", "options": [{"key": "A", "text": "Hepatitis A"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Cholera"}, {"key": "D", "text": "Dysentery"}], "answer": "A"},
+  {"module": "Module 2", "question": "What is the main reason for water contamination in rural India?", "options": [{"key": "A", "text": "Industrial waste"}, {"key": "B", "text": "Open defecation"}, {"key": "C", "text": "Rainwater"}, {"key": "D", "text": "Chlorination"}], "answer": "B"},
+  {"module": "Module 2", "question": "Fluoride contamination occurs mainly due to:", "options": [{"key": "A", "text": "Use of plastics"}, {"key": "B", "text": "Fertilizers"}, {"key": "C", "text": "Leaching of fluoride minerals in rocks"}, {"key": "D", "text": "Air pollution"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which method is widely used in households to remove fluoride?", "options": [{"key": "A", "text": "RO (Reverse Osmosis)"}, {"key": "B", "text": "Boiling"}, {"key": "C", "text": "UV filtration"}, {"key": "D", "text": "Heating water"}], "answer": "A"},
+  {"module": "Module 2", "question": "What is the main source of fluoride in groundwater?", "options": [{"key": "A", "text": "Agricultural runoff"}, {"key": "B", "text": "Sewage water"}, {"key": "C", "text": "Fluoride-containing rocks"}, {"key": "D", "text": "Industrial air pollution"}], "answer": "C"},
+  {"module": "Module 2", "question": "A disease caused by ingestion of contaminated water with Salmonella typhi is:", "options": [{"key": "A", "text": "Dysentery"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Diarrhea"}, {"key": "D", "text": "Cholera"}], "answer": "B"},
+  {"module": "Module 2", "question": "What color discoloration is typically seen in dental fluorosis?", "options": [{"key": "A", "text": "Green"}, {"key": "B", "text": "Black"}, {"key": "C", "text": "White or brown"}, {"key": "D", "text": "Yellow"}], "answer": "C"},
+  {"module": "Module 2", "question": "One of the most effective public health measures for controlling water-borne diseases is:", "options": [{"key": "A", "text": "Non-Renewable Energy Sources"}, {"key": "B", "text": "Renewable Energy Sources"}, {"key": "C", "text": "Providing safe drinking water"}, {"key": "D", "text": "More hospitals"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following is a non-renewable source of energy?", "options": [{"key": "A", "text": "Solar energy"}, {"key": "B", "text": "Wind energy"}, {"key": "C", "text": "Coal"}, {"key": "D", "text": "Biomass"}], "answer": "C"},
+  {"module": "Module 2", "question": "What is the primary source of wind energy?", "options": [{"key": "A", "text": "Earth's rotation"}, {"key": "B", "text": "Tides"}, {"key": "C", "text": "Sun"}, {"key": "D", "text": "Moon"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which device is used to convert wind energy into electrical energy?", "options": [{"key": "A", "text": "Solar panel"}, {"key": "B", "text": "Hydroelectric turbine"}, {"key": "C", "text": "Wind turbine"}, {"key": "D", "text": "Gas engine"}], "answer": "C"},
+  {"module": "Module 2", "question": "Hydrogen is considered a clean fuel because:", "options": [{"key": "A", "text": "It produces sulfur when burned"}, {"key": "B", "text": "It is expensive"}, {"key": "C", "text": "It produces only water as a byproduct"}, {"key": "D", "text": "It is easy to store"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following is not an advantage of wind energy?", "options": [{"key": "A", "text": "Renewable"}, {"key": "B", "text": "Zero pollution"}, {"key": "C", "text": "Unlimited availability"}, {"key": "D", "text": "Consistent power generation"}], "answer": "D"},
+  {"module": "Module 2", "question": "The most abundant element in the universe, used as an alternative fuel, is:", "options": [{"key": "A", "text": "Oxygen"}, {"key": "B", "text": "Nitrogen"}, {"key": "C", "text": "Hydrogen"}, {"key": "D", "text": "Helium"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which process is commonly used to produce hydrogen from water?", "options": [{"key": "A", "text": "Combustion"}, {"key": "B", "text": "Fermentation"}, {"key": "C", "text": "Electrolysis"}, {"key": "D", "text": "Oxidation"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which is not a limitation of hydrogen fuel?", "options": [{"key": "A", "text": "Storage difficulties"}, {"key": "B", "text": "High energy content"}, {"key": "C", "text": "Flammability"}, {"key": "D", "text": "High production cost"}], "answer": "B"},
+  {"module": "Module 2", "question": "What is the main environmental benefit of using hydrogen as fuel?", "options": [{"key": "A", "text": "Produces methane"}, {"key": "B", "text": "Emits CO₂"}, {"key": "C", "text": "Produces only water vapor"}, {"key": "D", "text": "Emits nitrogen oxides"}], "answer": "C"},
+  {"module": "Module 2", "question": "What is the average capacity factor of wind energy systems?", "options": [{"key": "A", "text": "80–90%"}, {"key": "B", "text": "30–40%"}, {"key": "C", "text": "100%"}, {"key": "D", "text": "10–15%"}], "answer": "B"},
+  {"module": "Module 2", "question": "Which country is the global leader in wind energy production?", "options": [{"key": "A", "text": "India"}, {"key": "B", "text": "Germany"}, {"key": "C", "text": "USA"}, {"key": "D", "text": "China"}], "answer": "D"},
+  {"module": "Module 2", "question": "Wind energy is best harnessed in:", "options": [{"key": "A", "text": "Urban areas"}, {"key": "B", "text": "Deserts"}, {"key": "C", "text": "Coastal and hill regions"}, {"key": "D", "text": "Underground mines"}], "answer": "C"},
+  {"module": "Module 2", "question": "The main disadvantage of wind power is:", "options": [{"key": "A", "text": "It's non-renewable"}, {"key": "B", "text": "Emits CO₂"}, {"key": "C", "text": "Intermittency"}, {"key": "D", "text": "Expensive to operate"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which of the following energy types has the least environmental impact?", "options": [{"key": "A", "text": "Coal"}, {"key": "B", "text": "Natural gas"}, {"key": "C", "text": "Solar"}, {"key": "D", "text": "Oil"}], "answer": "C"},
+  {"module": "Module 2", "question": "What is a common use of hydrogen fuel today?", "options": [{"key": "A", "text": "Cooking gas"}, {"key": "B", "text": "Aviation fuel"}, {"key": "C", "text": "Fuel cells in vehicles"}, {"key": "D", "text": "Textile dyeing"}], "answer": "C"},
+  {"module": "Module 2", "question": "Which form of energy does wind energy primarily convert?", "options": [{"key": "A", "text": "Kinetic to electric"}, {"key": "B", "text": "Thermal to chemical"}, {"key": "C", "text": "Potential to nuclear"}, {"key": "D", "text": "Electric to magnetic"}], "answer": "A"},
+  {"module": "Module 2", "question": "What is a fuel cell?", "options": [{"key": "A", "text": "A battery that burns coal"}, {"key": "B", "text": "A cell that stores nuclear energy"}, {"key": "C", "text": "A device that converts hydrogen into electricity"}, {"key": "D", "text": "A container of gasoline"}], "answer": "C"},
+  {"module": "Module 2", "question": "What is the primary component of a wind turbine?", "options": [{"key": "A", "text": "Rotor blades"}, {"key": "B", "text": "Solar collector"}, {"key": "C", "text": "Boiler"}, {"key": "D", "text": "Condenser"}], "answer": "A"},
+  {"module": "Module 2", "question": "The biggest challenge in hydrogen fuel technology is:", "options": [{"key": "A", "text": "Its color"}, {"key": "B", "text": "High CO₂ emission"}, {"key": "C", "text": "Storage and transportation"}, {"key": "D", "text": "Abundance"}], "answer": "C"},
+  {"module": "Module 2", "question": "Hydrogen can be obtained from:", "options": [{"key": "A", "text": "Soil"}, {"key": "B", "text": "Sunlight directly"}, {"key": "C", "text": "Fossil fuels and water"}, {"key": "D", "text": "Wood only"}], "answer": "C"},
+  {"module": "Module 3", "question": "What is the most common cause of water pollution in urban areas?", "options": [{"key": "A", "text": "Volcanic eruptions"}, {"key": "B", "text": "Domestic sewage"}, {"key": "C", "text": "Wind erosion"}, {"key": "D", "text": "Forest fires"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which of the following is a biological pollutant of water?", "options": [{"key": "A", "text": "Lead"}, {"key": "B", "text": "Mercury"}, {"key": "C", "text": "Escherichia coli"}, {"key": "D", "text": "Nitrate"}], "answer": "C"},
+  {"module": "Module 3", "question": "Eutrophication is mainly caused by the presence of:", "options": [{"key": "A", "text": "Radioactive substances"}, {"key": "B", "text": "Oil spills"}, {"key": "C", "text": "Excess nitrates and phosphates"}, {"key": "D", "text": "Organic acids"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which of the following diseases is waterborne?", "options": [{"key": "A", "text": "Malaria"}, {"key": "B", "text": "Cholera"}, {"key": "C", "text": "Tuberculosis"}, {"key": "D", "text": "Asthma"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which method is effective in treating industrial effluents?", "options": [{"key": "A", "text": "Boiling"}, {"key": "B", "text": "Sand filtration"}, {"key": "C", "text": "Effluent Treatment Plant (ETP)"}, {"key": "D", "text": "Chlorination"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which heavy metal is commonly associated with water pollution?", "options": [{"key": "A", "text": "Iron"}, {"key": "B", "text": "Aluminium"}, {"key": "C", "text": "Lead"}, {"key": "D", "text": "Magnesium"}], "answer": "C"},
+  {"module": "Module 3", "question": "Bioaccumulation refers to:", "options": [{"key": "A", "text": "Increase in atmospheric CO₂"}, {"key": "B", "text": "Accumulation of toxins in the food chain"}, {"key": "C", "text": "Oxygen depletion in water"}, {"key": "D", "text": "Growth of algae"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which process can remove nitrates from wastewater?", "options": [{"key": "A", "text": "Chlorination"}, {"key": "B", "text": "Sedimentation"}, {"key": "C", "text": "Biological denitrification"}, {"key": "D", "text": "Electrolysis"}], "answer": "C"},
+  {"module": "Module 3", "question": "The safe permissible limit of noise in residential areas at night is:", "options": [{"key": "A", "text": "50 dB"}, {"key": "B", "text": "60 dB"}, {"key": "C", "text": "45 dB"}, {"key": "D", "text": "40 dB"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which zone has the lowest permissible noise level?", "options": [{"key": "A", "text": "Industrial"}, {"key": "B", "text": "Commercial"}, {"key": "C", "text": "Residential"}, {"key": "D", "text": "Silent"}], "answer": "D"},
+  {"module": "Module 3", "question": "Which device is used to measure noise pollution?", "options": [{"key": "A", "text": "Barometer"}, {"key": "B", "text": "Audiometer"}, {"key": "C", "text": "Sound level meter"}, {"key": "D", "text": "Seismograph"}], "answer": "C"},
+  {"module": "Module 3", "question": "Noise pollution can cause:", "options": [{"key": "A", "text": "Fever"}, {"key": "B", "text": "Skin rashes"}, {"key": "C", "text": "Hearing loss"}, {"key": "D", "text": "Diabetes"}], "answer": "C"},
+  {"module": "Module 3", "question": "One of the main sources of noise in cities is:", "options": [{"key": "A", "text": "Ocean waves"}, {"key": "B", "text": "Road traffic"}, {"key": "C", "text": "Rainfall"}, {"key": "D", "text": "Birds chirping"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which of the following is a method to reduce noise pollution?", "options": [{"key": "A", "text": "Deforestation"}, {"key": "B", "text": "Using loudspeakers"}, {"key": "C", "text": "Planting trees"}, {"key": "D", "text": "Constructing flyovers"}], "answer": "C"},
+  {"module": "Module 3", "question": "Noise pollution primarily affects:", "options": [{"key": "A", "text": "Digestive system"}, {"key": "B", "text": "Auditory system"}, {"key": "C", "text": "Endocrine system"}, {"key": "D", "text": "Reproductive system"}], "answer": "B"},
+  {"module": "Module 3", "question": "A typical sound level in a quiet library is around:", "options": [{"key": "A", "text": "30 dB"}, {"key": "B", "text": "80 dB"}, {"key": "C", "text": "100 dB"}, {"key": "D", "text": "70 dB"}], "answer": "A"},
+  {"module": "Module 3", "question": "Which is not a source of water pollution?", "options": [{"key": "A", "text": "Oil spill"}, {"key": "B", "text": "Thermal discharge"}, {"key": "C", "text": "Aquaculture"}, {"key": "D", "text": "Composting"}], "answer": "D"},
+  {"module": "Module 3", "question": "The CPCB stands for:", "options": [{"key": "A", "text": "Central Pollution Control Board"}, {"key": "B", "text": "Central Public Control Bureau"}, {"key": "C", "text": "Council for Pollution and Climate Balance"}, {"key": "D", "text": "Central Power Corporation Board"}], "answer": "A"},
+  {"module": "Module 3", "question": "Noise above which decibel level is considered harmful for humans?", "options": [{"key": "A", "text": "20 dB"}, {"key": "B", "text": "50 dB"}, {"key": "C", "text": "85 dB"}, {"key": "D", "text": "120 dB"}], "answer": "C"},
+  {"module": "Module 3", "question": "A long-term exposure to high noise levels can lead to:", "options": [{"key": "A", "text": "Increased oxygen levels"}, {"key": "B", "text": "Memory enhancement"}, {"key": "C", "text": "Hypertension"}, {"key": "D", "text": "Improved digestion"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which of the following is a primary air pollutant?", "options": [{"key": "A", "text": "Ozone"}, {"key": "B", "text": "Peroxyacetyl nitrate (PAN)"}, {"key": "C", "text": "Carbon monoxide (CO)"}, {"key": "D", "text": "Sulphur trioxide (SO₃)"}], "answer": "C"},
+  {"module": "Module 3", "question": "The main source of carbon monoxide in urban areas is:", "options": [{"key": "A", "text": "Agricultural waste"}, {"key": "B", "text": "Vehicle emissions"}, {"key": "C", "text": "Industrial waste"}, {"key": "D", "text": "Forest fires"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which gas causes acid rain?", "options": [{"key": "A", "text": "Methane"}, {"key": "B", "text": "Nitrogen"}, {"key": "C", "text": "Sulphur dioxide"}, {"key": "D", "text": "Hydrogen"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which pollutant is responsible for the formation of photochemical smog?", "options": [{"key": "A", "text": "Carbon dioxide"}, {"key": "B", "text": "Nitrogen oxides and hydrocarbons"}, {"key": "C", "text": "Oxygen"}, {"key": "D", "text": "Ammonia"}], "answer": "B"},
+  {"module": "Module 3", "question": "One of the major health effects of particulate matter is:", "options": [{"key": "A", "text": "Headache"}, {"key": "B", "text": "Lung diseases"}, {"key": "C", "text": "Broken bones"}, {"key": "D", "text": "Skin rash"}], "answer": "B"},
+  {"module": "Module 3", "question": "Air Quality Index (AQI) indicates:", "options": [{"key": "A", "text": "Level of water purity"}, {"key": "B", "text": "Level of sound in the environment"}, {"key": "C", "text": "Overall quality of ambient air"}, {"key": "D", "text": "Intensity of UV radiation"}], "answer": "C"},
+  {"module": "Module 3", "question": "The 'Great Smog' of London (1952) was caused by:", "options": [{"key": "A", "text": "Forest fire"}, {"key": "B", "text": "Volcanic eruption"}, {"key": "C", "text": "Coal burning"}, {"key": "D", "text": "Oil spill"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which of the following is a greenhouse gas?", "options": [{"key": "A", "text": "Oxygen"}, {"key": "B", "text": "Hydrogen"}, {"key": "C", "text": "Carbon dioxide"}, {"key": "D", "text": "Helium"}], "answer": "C"},
+  {"module": "Module 3", "question": "The device used to reduce vehicle exhaust emissions is called:", "options": [{"key": "A", "text": "Electrostatic precipitator"}, {"key": "B", "text": "Air scrubber"}, {"key": "C", "text": "Catalytic converter"}, {"key": "D", "text": "Cyclone separator"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which organ is most affected by air pollution?", "options": [{"key": "A", "text": "Brain"}, {"key": "B", "text": "Kidney"}, {"key": "C", "text": "Lungs"}, {"key": "D", "text": "Liver"}], "answer": "C"},
+  {"module": "Module 3", "question": "A natural source of air pollution is:", "options": [{"key": "A", "text": "Automobiles"}, {"key": "B", "text": "Forest fires"}, {"key": "C", "text": "Factories"}, {"key": "D", "text": "Thermal power plants"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which of the following is a secondary air pollutant?", "options": [{"key": "A", "text": "Ozone"}, {"key": "B", "text": "Carbon monoxide"}, {"key": "C", "text": "Lead"}, {"key": "D", "text": "Sulphur dioxide"}], "answer": "A"},
+  {"module": "Module 3", "question": "The act related to air pollution control in India is:", "options": [{"key": "A", "text": "Forest Conservation Act, 1980"}, {"key": "B", "text": "Water (Prevention and Control of Pollution) Act, 1974"}, {"key": "C", "text": "Air (Prevention and Control of Pollution) Act, 1981"}, {"key": "D", "text": "Environment Protection Act, 1986"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which is not a preventive measure for air pollution?", "options": [{"key": "A", "text": "Use of CNG in vehicles"}, {"key": "B", "text": "Planting more trees"}, {"key": "C", "text": "Using leaded petrol"}, {"key": "D", "text": "Installing air pollution control devices"}], "answer": "C"},
+  {"module": "Module 3", "question": "Pollutants that remain suspended in air for a long time are called:", "options": [{"key": "A", "text": "Particulate matter"}, {"key": "B", "text": "Vapours"}, {"key": "C", "text": "Aerosols"}, {"key": "D", "text": "Mist"}], "answer": "A"},
+  {"module": "Module 3", "question": "Bhopal gas tragedy involved the release of:", "options": [{"key": "A", "text": "Chlorine"}, {"key": "B", "text": "Methyl isocyanate"}, {"key": "C", "text": "Sulphur dioxide"}, {"key": "D", "text": "Carbon monoxide"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which gas is not a pollutant?", "options": [{"key": "A", "text": "Nitrogen"}, {"key": "B", "text": "Ozone"}, {"key": "C", "text": "Carbon monoxide"}, {"key": "D", "text": "Sulphur dioxide"}], "answer": "A"},
+  {"module": "Module 3", "question": "A common indoor air pollutant in rural Indian homes is:", "options": [{"key": "A", "text": "CO₂"}, {"key": "B", "text": "CFC"}, {"key": "C", "text": "Smoke from biomass burning"}, {"key": "D", "text": "Methane"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which city first implemented the odd-even vehicle rule to reduce pollution?", "options": [{"key": "A", "text": "Mumbai"}, {"key": "B", "text": "Bengaluru"}, {"key": "C", "text": "Delhi"}, {"key": "D", "text": "Hyderabad"}], "answer": "C"},
+  {"module": "Module 3", "question": "The main goal of the National Air Quality Monitoring Program (NAMP) is to:", "options": [{"key": "A", "text": "Improve water quality"}, {"key": "B", "text": "Monitor soil erosion"}, {"key": "C", "text": "Measure noise pollution"}, {"key": "D", "text": "Monitor and assess ambient air quality"}], "answer": "D"},
+  {"module": "Module 3", "question": "Which of the following gases is primarily responsible for acid rain?", "options": [{"key": "A", "text": "Methane"}, {"key": "B", "text": "Nitrogen"}, {"key": "C", "text": "Sulfur dioxide"}, {"key": "D", "text": "Carbon monoxide"}], "answer": "C"},
+  {"module": "Module 3", "question": "What is the typical pH of acid rain?", "options": [{"key": "A", "text": "7"}, {"key": "B", "text": "Above 7"}, {"key": "C", "text": "5.6 or below"}, {"key": "D", "text": "6.5"}], "answer": "C"},
+  {"module": "Module 3", "question": "The Taj Mahal is affected due to which environmental issue?", "options": [{"key": "A", "text": "Ozone Depletion"}, {"key": "B", "text": "Acid Rain"}, {"key": "C", "text": "Global Warming"}, {"key": "D", "text": "Water Pollution"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which of the following is a man-made compound that depletes the ozone layer?", "options": [{"key": "A", "text": "Methane"}, {"key": "B", "text": "CFCs"}, {"key": "C", "text": "CO₂"}, {"key": "D", "text": "Hydrogen"}], "answer": "B"},
+  {"module": "Module 3", "question": "The ozone layer is present in which part of the atmosphere?", "options": [{"key": "A", "text": "Troposphere"}, {"key": "B", "text": "Mesosphere"}, {"key": "C", "text": "Thermosphere"}, {"key": "D", "text": "Stratosphere"}], "answer": "D"},
+  {"module": "Module 3", "question": "The international agreement to phase out ozone-depleting substances is:", "options": [{"key": "A", "text": "Kyoto Protocol"}, {"key": "B", "text": "Montreal Protocol"}, {"key": "C", "text": "Paris Agreement"}, {"key": "D", "text": "Earth Summit"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which radiation is absorbed by the ozone layer?", "options": [{"key": "A", "text": "UV-A only"}, {"key": "B", "text": "UV-B and UV-C"}, {"key": "C", "text": "Infrared"}, {"key": "D", "text": "Radio waves"}], "answer": "B"},
+  {"module": "Module 3", "question": "The major contributor to global warming is:", "options": [{"key": "A", "text": "Nitrogen"}, {"key": "B", "text": "Oxygen"}, {"key": "C", "text": "Carbon dioxide"}, {"key": "D", "text": "Helium"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which of the following is not a greenhouse gas?", "options": [{"key": "A", "text": "Water vapor"}, {"key": "B", "text": "Methane"}, {"key": "C", "text": "Oxygen"}, {"key": "D", "text": "Nitrous oxide"}], "answer": "C"},
+  {"module": "Module 3", "question": "Global warming causes which of the following?", "options": [{"key": "A", "text": "Thicker ozone layer"}, {"key": "B", "text": "Lower sea levels"}, {"key": "C", "text": "Melting of glaciers"}, {"key": "D", "text": "Increased soil fertility"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which country has experienced one of the largest ozone holes?", "options": [{"key": "A", "text": "Canada"}, {"key": "B", "text": "Russia"}, {"key": "C", "text": "Antarctica"}, {"key": "D", "text": "India"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which gas has the highest global warming potential among the following?", "options": [{"key": "A", "text": "CO₂"}, {"key": "B", "text": "Methane"}, {"key": "C", "text": "CFC-12"}, {"key": "D", "text": "Nitrogen"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which human activity contributes most to greenhouse gas emissions?", "options": [{"key": "A", "text": "Deforestation"}, {"key": "B", "text": "Fossil fuel combustion"}, {"key": "C", "text": "Waste disposal"}, {"key": "D", "text": "Construction"}], "answer": "B"},
+  {"module": "Module 3", "question": "Groundwater depletion leads to:", "options": [{"key": "A", "text": "Improved water quality"}, {"key": "B", "text": "Land subsidence"}, {"key": "C", "text": "More rainfall"}, {"key": "D", "text": "Ozone hole formation"}], "answer": "B"},
+  {"module": "Module 3", "question": "Which method is most effective in recharging groundwater?", "options": [{"key": "A", "text": "Paving roads"}, {"key": "B", "text": "Deep borewells"}, {"key": "C", "text": "Rainwater harvesting"}, {"key": "D", "text": "Removing vegetation"}], "answer": "C"},
+  {"module": "Module 3", "question": "Saltwater intrusion is a direct result of:", "options": [{"key": "A", "text": "Over-irrigation"}, {"key": "B", "text": "Urbanization"}, {"key": "C", "text": "Groundwater over-extraction"}, {"key": "D", "text": "Acid rain"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which of the following helps reduce global warming?", "options": [{"key": "A", "text": "Deforestation"}, {"key": "B", "text": "Use of coal"}, {"key": "C", "text": "Afforestation"}, {"key": "D", "text": "Urban sprawl"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which energy source emits the least greenhouse gases?", "options": [{"key": "A", "text": "Coal"}, {"key": "B", "text": "Oil"}, {"key": "C", "text": "Solar"}, {"key": "D", "text": "Natural gas"}], "answer": "C"},
+  {"module": "Module 3", "question": "Increased exposure to UV rays due to ozone depletion can cause:", "options": [{"key": "A", "text": "Diabetes"}, {"key": "B", "text": "Asthma"}, {"key": "C", "text": "Skin cancer"}, {"key": "D", "text": "Typhoid"}], "answer": "C"},
+  {"module": "Module 3", "question": "Which protocol is related to the reduction of greenhouse gas emissions?", "options": [{"key": "A", "text": "Montreal Protocol"}, {"key": "B", "text": "Basel Convention"}, {"key": "C", "text": "Kyoto Protocol"}, {"key": "D", "text": "Minamata Convention"}], "answer": "C"}
+];
+
+// Clean all questions on initialization
+const BANK = RAW_BANK.map(q => ({
+  ...q,
+  question: cleanPrompt(q.question)
+}));
+
+const $ = id => document.getElementById(id);
+let quiz = [], index = 0, answers = {}, sessionCorrect = 0;
+
+$('totalStat').textContent = BANK.length;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function updateStats() {
+  const answeredCount = Object.keys(answers).length;
+  $('scoreStat').textContent = sessionCorrect;
+  $('accuracyStat').textContent = answeredCount ? Math.round((sessionCorrect / answeredCount) * 100) + '%' : '0%';
+}
+
+function selectedBank() {
+  const mod = $('module').value;
+  const term = $('search').value.trim().toLowerCase();
+  
+  let list = BANK.filter(q => {
+    const matchMod = (mod === 'All' || q.module === mod);
+    const matchTerm = !term || (q.question + ' ' + q.options.map(o => o.text).join(' ')).toLowerCase().includes(term);
+    return matchMod && matchTerm;
+  });
+
+  if ($('shuffle').checked) list = shuffle(list);
+
+  const mode = $('mode').value;
+  if (mode === 'random') list = shuffle(list).slice(0, 20);
+  else if (mode === '20' || mode === '10') list = list.slice(0, Number(mode));
+  
+  return list;
+}
+
+function start(list) {
+  quiz = list;
+  index = 0;
+  answers = {};
+  sessionCorrect = 0;
+  updateStats();
+  
+  $('resultCard').classList.remove('show');
+  $('quizCard').style.display = 'block';
+
+  if (!quiz.length) {
+    $('prompt').textContent = 'No questions match your filter. Try adjusting your search or module.';
+    $('options').innerHTML = '';
+    $('counter').textContent = '0 questions';
+    $('moduleTag').textContent = 'No results';
+    $('progressBar').style.width = '0%';
+    $('prevBtn').disabled = true;
+    $('nextBtn').disabled = true;
+    return;
+  }
+  render();
+}
+
+function render() {
+  const q = quiz[index];
+  const chosen = answers[index];
+
+  $('moduleTag').textContent = q.module;
+  $('counter').textContent = `Question ${index + 1} of ${quiz.length}`;
+  $('progressBar').style.width = `${((index + (chosen !== undefined ? 1 : 0)) / quiz.length) * 100}%`;
+  $('prompt').textContent = q.question;
+  
+  const optionsBox = $('options');
+  optionsBox.innerHTML = '';
+  $('feedback').className = 'feedback';
+  $('feedback').innerHTML = '';
+
+  q.options.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.type = 'button';
+    
+    const letter = document.createElement('span');
+    letter.className = 'letter';
+    letter.textContent = o.key;
+    
+    const txt = document.createElement('span');
+    txt.textContent = o.text;
+    b.append(letter, txt);
+
+    if (chosen !== undefined) {
+      b.disabled = true;
+      if (o.key === q.answer) b.classList.add('correct');
+      if (o.key === chosen && chosen !== q.answer) b.classList.add('wrong');
+    } else {
+      b.addEventListener('click', () => choose(o.key));
+    }
+    optionsBox.appendChild(b);
+  });
+
+  if (chosen !== undefined) showFeedback(q, chosen);
+
+  $('prevBtn').disabled = index === 0;
+  $('nextBtn').disabled = chosen === undefined;
+  $('nextBtn').textContent = index === quiz.length - 1 ? 'Finish quiz ✓' : 'Next question →';
+}
+
+function choose(key) {
+  if (answers[index] !== undefined) return;
+  answers[index] = key;
+  if (key === quiz[index].answer) {
+    sessionCorrect++;
+  }
+  updateStats();
+  render();
+}
+
+function showFeedback(q, chosen) {
+  const box = $('feedback');
+  const correct = q.options.find(o => o.key === q.answer);
+  const selected = q.options.find(o => o.key === chosen);
+
+  box.classList.add('show', chosen === q.answer ? 'good' : 'bad');
+  box.innerHTML = `
+    <strong>${chosen === q.answer ? '✓ Excellent, that’s correct!' : '✕ Not quite right'}</strong>
+    <div>${chosen === q.answer ? 'Your answer: ' : 'You answered: '}<b>${escapeHtml(selected.text)}</b></div>
+    ${chosen !== q.answer ? `<div style="margin-top:6px"><b>Correct answer:</b> ${escapeHtml(correct.text)}</div>` : ''}
+    <div style="margin-top:8px; font-size:13px; opacity:0.9">Source: VTU / BESK508 Environmental Studies Courseware.</div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function finish() {
+  $('quizCard').style.display = 'none';
+  $('resultCard').classList.add('show');
+  
+  const total = quiz.length;
+  const pct = Math.round((sessionCorrect / total) * 100);
+  $('finalScore').textContent = `${sessionCorrect} / ${total}`;
+  
+  if (pct === 100) $('resultTitle').textContent = '🌟 Flawless Mastery!';
+  else if (pct >= 75) $('resultTitle').textContent = '🌿 Outstanding Job!';
+  else if (pct >= 50) $('resultTitle').textContent = '👍 Good Effort — Keep practicing!';
+  else $('resultTitle').textContent = '📖 Review your notes and try again!';
+
+  $('resultText').textContent = `You scored ${pct}% across this practice set. Review your mistakes to reinforce critical environmental formulas and concepts.`;
+}
+
+// Event Listeners
+$('startBtn').addEventListener('click', () => start(selectedBank()));
+
+$('resetBtn').addEventListener('click', () => {
+  $('search').value = '';
+  $('module').value = 'All';
+  $('mode').value = 'all';
+  $('shuffle').checked = false;
+  start([]);
+  $('prompt').textContent = 'Select a module and press “Start quiz” when you’re ready.';
+  $('moduleTag').textContent = 'Ready to practice';
+  $('counter').textContent = 'Choose a module';
+  $('progressBar').style.width = '0%';
+  $('prevBtn').disabled = true;
+  $('nextBtn').disabled = true;
+  $('accuracyStat').textContent = '0%';
+});
+
+$('prevBtn').addEventListener('click', () => { if (index > 0) { index--; render(); } });
+$('nextBtn').addEventListener('click', () => { if (index < quiz.length - 1) { index++; render(); } else finish(); });
+$('againBtn').addEventListener('click', () => start(selectedBank()));
+
+$('reviewBtn').addEventListener('click', () => {
+  const mistakes = quiz.filter((q, i) => answers[i] !== undefined && answers[i] !== q.answer);
+  if (!mistakes.length) {
+    alert('No mistakes in this session to review!');
+    return;
+  }
+  start(mistakes);
+});
+
+$('search').addEventListener('keydown', e => { if (e.key === 'Enter') start(selectedBank()); });
+
+// Keyboard hotkeys: A, B, C, D to answer; Arrow keys to navigate
+window.addEventListener('keydown', e => {
+  if (['input', 'select', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) return;
+  if (!quiz.length || $('quizCard').style.display === 'none') return;
+
+  const key = e.key.toUpperCase();
+  if (['A', 'B', 'C', 'D'].includes(key) && answers[index] === undefined) {
+    choose(key);
+  } else if (['1', '2', '3', '4'].includes(key) && answers[index] === undefined) {
+    const map = {'1':'A','2':'B','3':'C','4':'D'};
+    choose(map[key]);
+  } else if ((e.key === 'ArrowRight' || e.key === 'Enter') && answers[index] !== undefined) {
+    if (index < quiz.length - 1) { index++; render(); } else finish();
+  } else if (e.key === 'ArrowLeft' && index > 0) {
+    index--; render();
+  }
+});
+</script>
+</body>
+</html>
