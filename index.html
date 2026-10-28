@@ -148,7 +148,7 @@
 /* Layout */
 #evs-quiz-root .layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 290px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
 }
@@ -191,6 +191,8 @@
   font: inherit;
   font-size: 13.5px;
   outline: none;
+  white-space: normal;
+  text-overflow: ellipsis;
   transition: var(--transition);
 }
 #evs-quiz-root select:focus, 
@@ -489,22 +491,22 @@
       <h2>Build practice</h2>
       
       <div class="field">
-        <label for="evs-module">Module</label>
+        <label for="evs-module">Choose Module</label>
         <select id="evs-module">
-          <option value="All">All modules</option>
+          <option value="All">All modules (Full Bank)</option>
           <option value="Module 1">Module 1 · Environment & Sustainability</option>
           <option value="Module 2">Module 2 · Natural Resources & Energy</option>
           <option value="Module 3">Module 3 · Pollution & Global Issues</option>
+          <option value="Sample Quiz">Sample Quiz Paper (20 Questions)</option>
         </select>
       </div>
 
       <div class="field">
-        <label for="evs-mode">Questions</label>
+        <label for="evs-mode">Number of Questions</label>
         <select id="evs-mode">
           <option value="all">All questions in selection</option>
-          <option value="20">Practice set · 20 questions</option>
-          <option value="10">Quick revision · 10 questions</option>
-          <option value="random">Random 20 questions</option>
+          <option value="20">20 Questions</option>
+          <option value="10">10 Questions (Quick)</option>
         </select>
       </div>
 
@@ -517,7 +519,7 @@
         <div class="checks">
           <label class="check">
             <input type="checkbox" id="evs-shuffle"> 
-            <span>Shuffle questions</span>
+            <span>Shuffle question order</span>
           </label>
         </div>
       </div>
@@ -531,7 +533,7 @@
     </aside>
 
     <section class="quiz-area">
-      <!-- Quiz Interface -->
+      <!-- Quiz Card -->
       <div class="question-card" id="evs-quizCard">
         <div class="quiz-top">
           <span class="tag" id="evs-moduleTag">Ready</span>
@@ -561,7 +563,7 @@
         </div>
       </div>
 
-      <!-- Review Mistakes List Screen -->
+      <!-- Review Mistakes Screen -->
       <div class="question-card review-section" id="evs-reviewCard">
         <div class="quiz-top" style="margin-bottom:16px;">
           <span class="tag">Mistakes Review</span>
@@ -584,6 +586,7 @@
   const cleanPrompt = (q) => q.replace(/\s*[a-d]\)\s*.*$/i, '').trim();
 
   const RAW_BANK = [
+    // Module 1
     {"module": "Module 1", "question": "What are the two main components of the environment?", "options": [{"key": "A", "text": "Water and Air"}, {"key": "B", "text": "Biotic and Abiotic"}, {"key": "C", "text": "Plants and Animals"}, {"key": "D", "text": "Soil and Water"}], "answer": "B"},
     {"module": "Module 1", "question": "The layer of gases surrounding the Earth is called the:", "options": [{"key": "A", "text": "Lithosphere"}, {"key": "B", "text": "Hydrosphere"}, {"key": "C", "text": "Atmosphere"}, {"key": "D", "text": "Biosphere"}], "answer": "C"},
     {"module": "Module 1", "question": "Which of the following is a biotic component?", "options": [{"key": "A", "text": "Sunlight"}, {"key": "B", "text": "Water"}, {"key": "C", "text": "Bacteria"}, {"key": "D", "text": "Rocks"}], "answer": "C"},
@@ -604,96 +607,54 @@
     {"module": "Module 1", "question": "The function of an ecosystem refers to:", "options": [{"key": "A", "text": "Energy flow and nutrient cycling"}, {"key": "B", "text": "Only rainfall"}, {"key": "C", "text": "Only photosynthesis"}, {"key": "D", "text": "Presence of large carnivores"}], "answer": "A"},
     {"module": "Module 1", "question": "Primary productivity in an ecosystem refers to:", "options": [{"key": "A", "text": "Energy lost as heat"}, {"key": "B", "text": "Total biomass consumed"}, {"key": "C", "text": "The rate of solar energy conversion into chemical energy by producers"}, {"key": "D", "text": "Recycled energy"}], "answer": "C"},
     {"module": "Module 1", "question": "In a forest ecosystem, the main producers are:", "options": [{"key": "A", "text": "Algae"}, {"key": "B", "text": "Grass"}, {"key": "C", "text": "Phytoplankton"}, {"key": "D", "text": "Trees"}], "answer": "D"},
-    {"module": "Module 1", "question": "Which one of the following is NOT a component of ecosystem function?", "options": [{"key": "A", "text": "Energy flow"}, {"key": "B", "text": "Nutrient cycling"}, {"key": "C", "text": "Temperature change"}, {"key": "D", "text": "Decomposition"}], "answer": "C"},
-    {"module": "Module 1", "question": "A climax community in forest ecosystems represents:", "options": [{"key": "A", "text": "Early stage of forest development"}, {"key": "B", "text": "Stable and mature ecological stage"}, {"key": "C", "text": "Disturbed ecosystem"}, {"key": "D", "text": "Only shrubs and grasses"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which of the following is a man-made ecosystem?", "options": [{"key": "A", "text": "Tropical rainforest"}, {"key": "B", "text": "Desert"}, {"key": "C", "text": "Wetland"}, {"key": "D", "text": "Agricultural field"}], "answer": "D"},
-    {"module": "Module 1", "question": "Wetlands are known for their ability to:", "options": [{"key": "A", "text": "Produce fossil fuels"}, {"key": "B", "text": "Filter pollutants and support biodiversity"}, {"key": "C", "text": "Increase desertification"}, {"key": "D", "text": "Reduce aquatic life"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which of the following is NOT a type of forest ecosystem?", "options": [{"key": "A", "text": "Tropical rainforest"}, {"key": "B", "text": "Coniferous forest"}, {"key": "C", "text": "Urban forest"}, {"key": "D", "text": "Desert scrub"}], "answer": "D"},
-    {"module": "Module 1", "question": "Wetlands play a vital role in flood control by:", "options": [{"key": "A", "text": "Absorbing excess water during rains"}, {"key": "B", "text": "Creating more rainfall"}, {"key": "C", "text": "Blocking water completely"}, {"key": "D", "text": "None of the above"}], "answer": "A"},
-    {"module": "Module 1", "question": "Which species is commonly found in Indian mangrove wetlands?", "options": [{"key": "A", "text": "Cactus"}, {"key": "B", "text": "Rhizophora"}, {"key": "C", "text": "Bamboo"}, {"key": "D", "text": "Pine"}], "answer": "B"},
-    {"module": "Module 1", "question": "Peatlands, swamps, and marshes are examples of:", "options": [{"key": "A", "text": "Forest ecosystems"}, {"key": "B", "text": "Desert ecosystems"}, {"key": "C", "text": "Wetland ecosystems"}, {"key": "D", "text": "Grassland ecosystems"}], "answer": "C"},
-    {"module": "Module 1", "question": "Forests help mitigate climate change by:", "options": [{"key": "A", "text": "Emitting greenhouse gases"}, {"key": "B", "text": "Cutting oxygen supply"}, {"key": "C", "text": "Storing carbon through photosynthesis"}, {"key": "D", "text": "Raising temperatures"}], "answer": "C"},
-    {"module": "Module 1", "question": "Wetlands are important for migratory birds because:", "options": [{"key": "A", "text": "They offer no predators"}, {"key": "B", "text": "They are dry and open"}, {"key": "C", "text": "They provide nesting and feeding grounds"}, {"key": "D", "text": "They have artificial shelters"}], "answer": "C"},
-    {"module": "Module 1", "question": "Which of the following best describes a river ecosystem?", "options": [{"key": "A", "text": "Static freshwater system"}, {"key": "B", "text": "Flowing freshwater system with lotic characteristics"}, {"key": "C", "text": "Standing saltwater body"}, {"key": "D", "text": "Underground water system"}], "answer": "B"},
-    {"module": "Module 1", "question": "The zone in a lake where light does not penetrate is called the:", "options": [{"key": "A", "text": "Littoral zone"}, {"key": "B", "text": "Limnetic zone"}, {"key": "C", "text": "Profundal zone"}, {"key": "D", "text": "Pelagic zone"}], "answer": "C"},
-    {"module": "Module 1", "question": "Which of the following organisms is dominant in oceanic ecosystems?", "options": [{"key": "A", "text": "Bryophytes"}, {"key": "B", "text": "Phytoplankton"}, {"key": "C", "text": "Earthworms"}, {"key": "D", "text": "Cacti"}], "answer": "B"},
-    {"module": "Module 1", "question": "Ocean currents influence:", "options": [{"key": "A", "text": "Soil texture only"}, {"key": "B", "text": "Weather and climate patterns globally"}, {"key": "C", "text": "Only tidal waves"}, {"key": "D", "text": "Human emotions"}], "answer": "B"},
-    {"module": "Module 1", "question": "In a river ecosystem, the major source of primary productivity is:", "options": [{"key": "A", "text": "Zooplankton"}, {"key": "B", "text": "Phytoplankton and aquatic plants"}, {"key": "C", "text": "Fungi"}, {"key": "D", "text": "Sand particles"}], "answer": "B"},
-    {"module": "Module 1", "question": "Lake ecosystems are typically classified as:", "options": [{"key": "A", "text": "Marine ecosystems"}, {"key": "B", "text": "Terrestrial ecosystems"}, {"key": "C", "text": "Lentic freshwater ecosystems"}, {"key": "D", "text": "Lotic saltwater ecosystems"}], "answer": "C"},
-    {"module": "Module 1", "question": "Which of the following is a major abiotic factor in oceanic ecosystems?", "options": [{"key": "A", "text": "Temperature and salinity"}, {"key": "B", "text": "Bird migration"}, {"key": "C", "text": "Tree canopy"}, {"key": "D", "text": "Fungi diversity"}], "answer": "A"},
-    {"module": "Module 1", "question": "Eutrophication in lakes is primarily caused by:", "options": [{"key": "A", "text": "High oxygen content"}, {"key": "B", "text": "Excessive nutrient loading from agricultural runoff"}, {"key": "C", "text": "Presence of pebbles and stones"}, {"key": "D", "text": "Low sunlight"}], "answer": "B"},
-    {"module": "Module 1", "question": "The topmost layer in a lake where photosynthesis actively occurs is known as the:", "options": [{"key": "A", "text": "Aphotic zone"}, {"key": "B", "text": "Profundal zone"}, {"key": "C", "text": "Euphotic zone"}, {"key": "D", "text": "Benthic zone"}], "answer": "C"},
-    {"module": "Module 1", "question": "Which marine zone supports the most biodiversity?", "options": [{"key": "A", "text": "Abyssal zone"}, {"key": "B", "text": "Neritic zone"}, {"key": "C", "text": "Hadal zone"}, {"key": "D", "text": "Benthic zone"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which river in India is considered to have one of the most diverse freshwater ecosystems?", "options": [{"key": "A", "text": "Sabarmati"}, {"key": "B", "text": "Narmada"}, {"key": "C", "text": "Yamuna"}, {"key": "D", "text": "Ganga"}], "answer": "D"},
-    {"module": "Module 1", "question": "Ocean acidification is primarily due to:", "options": [{"key": "A", "text": "Increase in dissolved nitrogen"}, {"key": "B", "text": "Increase in CO₂ absorption"}, {"key": "C", "text": "Oil spills"}, {"key": "D", "text": "Overfishing"}], "answer": "B"},
-    {"module": "Module 1", "question": "Lakes that mix water from top to bottom only once a year are called:", "options": [{"key": "A", "text": "Meromictic lakes"}, {"key": "B", "text": "Polymictic lakes"}, {"key": "C", "text": "Monomictic lakes"}, {"key": "D", "text": "Dimictic lakes"}], "answer": "C"},
-    {"module": "Module 1", "question": "The river ecosystem is vital for:", "options": [{"key": "A", "text": "Absorbing carbon monoxide"}, {"key": "B", "text": "Polluting groundwater"}, {"key": "C", "text": "Recharging aquifers and sustaining biodiversity"}, {"key": "D", "text": "Salinizing farmland"}], "answer": "C"},
-    {"module": "Module 1", "question": "The term \"brackish water\" typically refers to:", "options": [{"key": "A", "text": "Pure saltwater"}, {"key": "B", "text": "Pure freshwater"}, {"key": "C", "text": "Water with mixed salt and freshwater characteristics"}, {"key": "D", "text": "Contaminated sewage water"}], "answer": "C"},
     {"module": "Module 1", "question": "What does SDG stand for?", "options": [{"key": "A", "text": "Sustainable Development Goals"}, {"key": "B", "text": "Social Development Guide"}, {"key": "C", "text": "Standard Development Goals"}, {"key": "D", "text": "Sustainable Diversity Goals"}], "answer": "A"},
     {"module": "Module 1", "question": "How many Sustainable Development Goals (SDGs) are defined by the United Nations?", "options": [{"key": "A", "text": "10"}, {"key": "B", "text": "15"}, {"key": "C", "text": "17"}, {"key": "D", "text": "20"}], "answer": "C"},
     {"module": "Module 1", "question": "Which SDG focuses on clean water and sanitation?", "options": [{"key": "A", "text": "SDG 4"}, {"key": "B", "text": "SDG 6"}, {"key": "C", "text": "SDG 10"}, {"key": "D", "text": "SDG 13"}], "answer": "B"},
     {"module": "Module 1", "question": "The target year for achieving the 17 SDGs is:", "options": [{"key": "A", "text": "2025"}, {"key": "B", "text": "2030"}, {"key": "C", "text": "2050"}, {"key": "D", "text": "2040"}], "answer": "B"},
     {"module": "Module 1", "question": "SDG 13 deals with:", "options": [{"key": "A", "text": "Industry, Innovation and Infrastructure"}, {"key": "B", "text": "Clean Energy"}, {"key": "C", "text": "Climate Action"}, {"key": "D", "text": "No Poverty"}], "answer": "C"},
-    {"module": "Module 1", "question": "Which SDG aims to end hunger and achieve food security?", "options": [{"key": "A", "text": "SDG 1"}, {"key": "B", "text": "SDG 2"}, {"key": "C", "text": "SDG 5"}, {"key": "D", "text": "SDG 3"}], "answer": "B"},
-    {"module": "Module 1", "question": "\"Affordable and Clean Energy\" is the goal of:", "options": [{"key": "A", "text": "SDG 4"}, {"key": "B", "text": "SDG 7"}, {"key": "C", "text": "SDG 12"}, {"key": "D", "text": "SDG 17"}], "answer": "B"},
-    {"module": "Module 1", "question": "The principle of sustainability focuses on:", "options": [{"key": "A", "text": "Immediate profits"}, {"key": "B", "text": "Balanced development of environment, society, and economy"}, {"key": "C", "text": "Political power"}, {"key": "D", "text": "Population growth"}], "answer": "B"},
-    {"module": "Module 1", "question": "SDG 12 aims at:", "options": [{"key": "A", "text": "Clean water for all"}, {"key": "B", "text": "Responsible consumption and production"}, {"key": "C", "text": "Zero hunger"}, {"key": "D", "text": "Quality education"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which of the following is an action to achieve SDG 13 (Climate Action)?", "options": [{"key": "A", "text": "Increase fossil fuel subsidies"}, {"key": "B", "text": "Promote solar and wind energy"}, {"key": "C", "text": "Deforestation"}, {"key": "D", "text": "Build more thermal power plants"}], "answer": "B"},
-    {"module": "Module 1", "question": "Gender equality is addressed in which SDG?", "options": [{"key": "A", "text": "SDG 2"}, {"key": "B", "text": "SDG 5"}, {"key": "C", "text": "SDG 11"}, {"key": "D", "text": "SDG 15"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which SDG promotes inclusive and quality education?", "options": [{"key": "A", "text": "SDG 3"}, {"key": "B", "text": "SDG 4"}, {"key": "C", "text": "SDG 8"}, {"key": "D", "text": "SDG 10"}], "answer": "B"},
-    {"module": "Module 1", "question": "\"Life Below Water\" is the focus of:", "options": [{"key": "A", "text": "SDG 14"}, {"key": "B", "text": "SDG 12"}, {"key": "C", "text": "SDG 9"}, {"key": "D", "text": "SDG 6"}], "answer": "A"},
-    {"module": "Module 1", "question": "Partnerships for the goals are discussed in:", "options": [{"key": "A", "text": "SDG 17"}, {"key": "B", "text": "SDG 1"}, {"key": "C", "text": "SDG 11"}, {"key": "D", "text": "SDG 15"}], "answer": "A"},
-    {"module": "Module 1", "question": "Which of the following is not a sustainability principle?", "options": [{"key": "A", "text": "Intergenerational equity"}, {"key": "B", "text": "Economic development only"}, {"key": "C", "text": "Environmental protection"}, {"key": "D", "text": "Social inclusion"}], "answer": "B"},
-    {"module": "Module 1", "question": "The term \"sustainable development\" was popularized by which report?", "options": [{"key": "A", "text": "Kyoto Protocol"}, {"key": "B", "text": "Brundtland Report"}, {"key": "C", "text": "Montreal Protocol"}, {"key": "D", "text": "Rio Declaration"}], "answer": "B"},
-    {"module": "Module 1", "question": "Which of these is a social sustainability indicator?", "options": [{"key": "A", "text": "CO₂ emissions"}, {"key": "B", "text": "Literacy rate"}, {"key": "C", "text": "Forest cover"}, {"key": "D", "text": "GDP"}], "answer": "B"},
-    {"module": "Module 1", "question": "SDG 11 is related to:", "options": [{"key": "A", "text": "Life on land"}, {"key": "B", "text": "Smart cities and communities"}, {"key": "C", "text": "Innovation and technology"}, {"key": "D", "text": "Zero poverty"}], "answer": "B"},
-    {"module": "Module 1", "question": "Possible actions to support SDG 6 include:", "options": [{"key": "A", "text": "Promoting water wastage"}, {"key": "B", "text": "Building open drains"}, {"key": "C", "text": "Reusing and conserving water"}, {"key": "D", "text": "Ignoring sewage treatment"}], "answer": "C"},
-    {"module": "Module 1", "question": "One major goal of SDG 15 (Life on Land) is to:", "options": [{"key": "A", "text": "Promote urbanisation"}, {"key": "B", "text": "Prevent overfishing"}, {"key": "C", "text": "Combat desertification and halt biodiversity loss"}, {"key": "D", "text": "Increase mining operations"}], "answer": "C"},
+
+    // Module 2
     {"module": "Module 2", "question": "What percentage of Earth's water is freshwater?", "options": [{"key": "A", "text": "50%"}, {"key": "B", "text": "30%"}, {"key": "C", "text": "2.5%"}, {"key": "D", "text": "10%"}], "answer": "C"},
     {"module": "Module 2", "question": "Which river is not part of the Indian river system?", "options": [{"key": "A", "text": "Ganga"}, {"key": "B", "text": "Nile"}, {"key": "C", "text": "Krishna"}, {"key": "D", "text": "Godavari"}], "answer": "B"},
     {"module": "Module 2", "question": "The ideal pH of drinking water should be:", "options": [{"key": "A", "text": "5.5"}, {"key": "B", "text": "6.5–8.5"}, {"key": "C", "text": "9.0"}, {"key": "D", "text": "10.5"}], "answer": "B"},
     {"module": "Module 2", "question": "Which parameter indicates the presence of organic pollutants in water?", "options": [{"key": "A", "text": "DO"}, {"key": "B", "text": "BOD"}, {"key": "C", "text": "COD"}, {"key": "D", "text": "TDS"}], "answer": "B"},
     {"module": "Module 2", "question": "Which technique helps conserve groundwater by collecting rooftop water?", "options": [{"key": "A", "text": "Desalination"}, {"key": "B", "text": "Distillation"}, {"key": "C", "text": "Rainwater Harvesting"}, {"key": "D", "text": "Filtration"}], "answer": "C"},
     {"module": "Module 2", "question": "Eutrophication is mainly caused by:", "options": [{"key": "A", "text": "Excess salt"}, {"key": "B", "text": "Organic matter"}, {"key": "C", "text": "Nutrient runoff"}, {"key": "D", "text": "Industrial effluents"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which organization is responsible for water pollution control in India?", "options": [{"key": "A", "text": "NDMA"}, {"key": "B", "text": "CPCB"}, {"key": "C", "text": "ISRO"}, {"key": "D", "text": "FCI"}], "answer": "B"},
-    {"module": "Module 2", "question": "The permissible TDS in drinking water is:", "options": [{"key": "A", "text": "1000 mg/L"}, {"key": "B", "text": "2000 mg/L"}, {"key": "C", "text": "500 mg/L"}, {"key": "D", "text": "50 mg/L"}], "answer": "C"},
-    {"module": "Module 2", "question": "Thermal pollution is associated with:", "options": [{"key": "A", "text": "Oil spills"}, {"key": "B", "text": "Domestic sewage"}, {"key": "C", "text": "Power plants"}, {"key": "D", "text": "Agriculture"}], "answer": "C"},
-    {"module": "Module 2", "question": "Drip irrigation is effective for:", "options": [{"key": "A", "text": "Reducing evaporation losses"}, {"key": "B", "text": "Flood control"}, {"key": "C", "text": "Power generation"}, {"key": "D", "text": "Filtration"}], "answer": "A"},
-    {"module": "Module 2", "question": "Which of the following acts governs water pollution in India?", "options": [{"key": "A", "text": "Water Act, 1974"}, {"key": "B", "text": "Forest Act, 1980"}, {"key": "C", "text": "Environment Act, 1986"}, {"key": "D", "text": "Biodiversity Act, 2002"}], "answer": "A"},
-    {"module": "Module 2", "question": "What is the process of adding chlorine to water called?", "options": [{"key": "A", "text": "Filtration"}, {"key": "B", "text": "Sedimentation"}, {"key": "C", "text": "Chlorination"}, {"key": "D", "text": "Coagulation"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which state pioneered rooftop rainwater harvesting?", "options": [{"key": "A", "text": "Tamil Nadu"}, {"key": "B", "text": "Rajasthan"}, {"key": "C", "text": "Gujarat"}, {"key": "D", "text": "Kerala"}], "answer": "A"},
-    {"module": "Module 2", "question": "What does BOD stand for?", "options": [{"key": "A", "text": "Biological Organism Demand"}, {"key": "B", "text": "Biodegradable Oxygen Demand"}, {"key": "C", "text": "Biochemical Oxygen Demand"}, {"key": "D", "text": "Biological Oxygen Division"}], "answer": "C"},
-    {"module": "Module 2", "question": "Groundwater depletion is caused by:", "options": [{"key": "A", "text": "Dams"}, {"key": "B", "text": "Desalination"}, {"key": "C", "text": "Over-irrigation"}, {"key": "D", "text": "Sewage treatment"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which of these is not a source of groundwater pollution?", "options": [{"key": "A", "text": "Septic tanks"}, {"key": "B", "text": "Leaky landfills"}, {"key": "C", "text": "Industrial injection wells"}, {"key": "D", "text": "Air pollution"}], "answer": "D"},
-    {"module": "Module 2", "question": "Which method is not used for wastewater treatment?", "options": [{"key": "A", "text": "Filtration"}, {"key": "B", "text": "Activated sludge process"}, {"key": "C", "text": "Reverse osmosis"}, {"key": "D", "text": "Acidification"}], "answer": "D"},
-    {"module": "Module 2", "question": "Which form of water resource is most accessible to humans?", "options": [{"key": "A", "text": "Glacial ice"}, {"key": "B", "text": "Ocean water"}, {"key": "C", "text": "Groundwater"}, {"key": "D", "text": "Atmospheric water"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which of the following is not a use of water?", "options": [{"key": "A", "text": "Irrigation"}, {"key": "B", "text": "Cooking"}, {"key": "C", "text": "Internet surfing"}, {"key": "D", "text": "Hydropower"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which cycle describes the movement of water through evaporation, precipitation, and runoff?", "options": [{"key": "A", "text": "Carbon Cycle"}, {"key": "B", "text": "Nitrogen Cycle"}, {"key": "C", "text": "Water Cycle"}, {"key": "D", "text": "Oxygen Cycle"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which of the following is a major cause of water-borne diseases?", "options": [{"key": "A", "text": "Clean drinking water"}, {"key": "B", "text": "Contaminated water"}, {"key": "C", "text": "Boiled water"}, {"key": "D", "text": "Distilled water"}], "answer": "B"},
-    {"module": "Module 2", "question": "Cholera is caused by which microorganism?", "options": [{"key": "A", "text": "Escherichia coli"}, {"key": "B", "text": "Salmonella typhi"}, {"key": "C", "text": "Vibrio cholerae"}, {"key": "D", "text": "Plasmodium vivax"}], "answer": "C"},
-    {"module": "Module 2", "question": "What is the primary symptom of typhoid fever?", "options": [{"key": "A", "text": "Joint pain"}, {"key": "B", "text": "High fever"}, {"key": "C", "text": "Rashes"}, {"key": "D", "text": "Headache only"}], "answer": "B"},
-    {"module": "Module 2", "question": "Which of the following water-borne diseases is caused by a virus?", "options": [{"key": "A", "text": "Hepatitis A"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Cholera"}, {"key": "D", "text": "Dysentery"}], "answer": "A"},
-    {"module": "Module 2", "question": "What is the primary mode of prevention for water-borne diseases?", "options": [{"key": "A", "text": "Vaccination only"}, {"key": "B", "text": "Drinking carbonated beverages"}, {"key": "C", "text": "Drinking safe and clean water"}, {"key": "D", "text": "Eating spicy food"}], "answer": "C"},
-    {"module": "Module 2", "question": "Dental fluorosis affects which part of the body?", "options": [{"key": "A", "text": "Liver"}, {"key": "B", "text": "Bones"}, {"key": "C", "text": "Teeth"}, {"key": "D", "text": "Heart"}], "answer": "C"},
     {"module": "Module 2", "question": "The safe limit of fluoride in drinking water as per WHO is:", "options": [{"key": "A", "text": "5 ppm"}, {"key": "B", "text": "3 ppm"}, {"key": "C", "text": "1.5 ppm"}, {"key": "D", "text": "0.1 ppm"}], "answer": "C"},
     {"module": "Module 2", "question": "Which technique is commonly used for defluoridation in rural India?", "options": [{"key": "A", "text": "Boiling"}, {"key": "B", "text": "Distillation"}, {"key": "C", "text": "Nalgonda technique"}, {"key": "D", "text": "Filtration with sand"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which of the following is NOT a symptom of skeletal fluorosis?", "options": [{"key": "A", "text": "Joint pain"}, {"key": "B", "text": "Soft bones"}, {"key": "C", "text": "Skin rashes"}, {"key": "D", "text": "Bone deformities"}], "answer": "C"},
-    {"module": "Module 2", "question": "Guinea worm disease is caused by:", "options": [{"key": "A", "text": "Virus"}, {"key": "B", "text": "Bacteria"}, {"key": "C", "text": "Protozoa"}, {"key": "D", "text": "Helminth (worm)"}], "answer": "D"},
-    {"module": "Module 2", "question": "Which of these states is highly affected by fluoride contamination?", "options": [{"key": "A", "text": "Kerala"}, {"key": "B", "text": "Punjab"}, {"key": "C", "text": "Rajasthan"}, {"key": "D", "text": "Jammu & Kashmir"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which nutrient reduces fluoride absorption in the human body?", "options": [{"key": "A", "text": "Vitamin A"}, {"key": "B", "text": "Calcium"}, {"key": "C", "text": "Iron"}, {"key": "D", "text": "Sodium"}], "answer": "B"},
-    {"module": "Module 2", "question": "Which of the following water-borne diseases causes jaundice?", "options": [{"key": "A", "text": "Hepatitis A"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Cholera"}, {"key": "D", "text": "Dysentery"}], "answer": "A"},
-    {"module": "Module 2", "question": "What is the main reason for water contamination in rural India?", "options": [{"key": "A", "text": "Industrial waste"}, {"key": "B", "text": "Open defecation"}, {"key": "C", "text": "Rainwater"}, {"key": "D", "text": "Chlorination"}], "answer": "B"},
-    {"module": "Module 2", "question": "Fluoride contamination occurs mainly due to:", "options": [{"key": "A", "text": "Use of plastics"}, {"key": "B", "text": "Fertilizers"}, {"key": "C", "text": "Leaching of fluoride minerals in rocks"}, {"key": "D", "text": "Air pollution"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which method is widely used in households to remove fluoride?", "options": [{"key": "A", "text": "RO (Reverse Osmosis)"}, {"key": "B", "text": "Boiling"}, {"key": "C", "text": "UV filtration"}, {"key": "D", "text": "Heating water"}], "answer": "A"},
-    {"module": "Module 2", "question": "What is the main source of fluoride in groundwater?", "options": [{"key": "A", "text": "Agricultural runoff"}, {"key": "B", "text": "Sewage water"}, {"key": "C", "text": "Fluoride-containing rocks"}, {"key": "D", "text": "Industrial air pollution"}], "answer": "C"},
-    {"module": "Module 2", "question": "A disease caused by ingestion of contaminated water with Salmonella typhi is:", "options": [{"key": "A", "text": "Dysentery"}, {"key": "B", "text": "Typhoid"}, {"key": "C", "text": "Diarrhea"}, {"key": "D", "text": "Cholera"}], "answer": "B"},
-    {"module": "Module 2", "question": "What color discoloration is typically seen in dental fluorosis?", "options": [{"key": "A", "text": "Green"}, {"key": "B", "text": "Black"}, {"key": "C", "text": "White or brown"}, {"key": "D", "text": "Yellow"}], "answer": "C"},
-    {"module": "Module 2", "question": "One of the most effective public health measures for controlling water-borne diseases is:", "options": [{"key": "A", "text": "Non-Renewable Energy Sources"}, {"key": "B", "text": "Renewable Energy Sources"}, {"key": "C", "text": "Providing safe drinking water"}, {"key": "D", "text": "More hospitals"}], "answer": "C"},
     {"module": "Module 2", "question": "Which of the following is a non-renewable source of energy?", "options": [{"key": "A", "text": "Solar energy"}, {"key": "B", "text": "Wind energy"}, {"key": "C", "text": "Coal"}, {"key": "D", "text": "Biomass"}], "answer": "C"},
-    {"module": "Module 2", "question": "What is the primary source of wind energy?", "options": [{"key": "A", "text": "Earth's rotation"}, {"key": "B", "text": "Tides"}, {"key": "C", "text": "Sun"}, {"key": "D", "text": "Moon"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which device is used to convert wind energy into electrical energy?", "options": [{"key": "A", "text": "Solar panel"}, {"key": "B", "text": "Hydroelectric turbine"}, {"key": "C", "text": "Wind turbine"}, {"key": "D", "text": "Gas engine"}], "answer": "C"},
     {"module": "Module 2", "question": "Hydrogen is considered a clean fuel because:", "options": [{"key": "A", "text": "It produces sulfur when burned"}, {"key": "B", "text": "It is expensive"}, {"key": "C", "text": "It produces only water as a byproduct"}, {"key": "D", "text": "It is easy to store"}], "answer": "C"},
-    {"module": "Module 2", "question": "Which of the following is not an advantage of wind energy?", "options": [{"key": "A", "text": "Renewable"}, {"key": "B", "text": "Zero pollution"}, {"key": "C", "text": "Unlimited availability"}, {"key": "D", "text": "Consistent power generation"}], "answer": "D"}
+
+    // Module 3
+    {"module": "Module 3", "question": "What is the most common cause of water pollution in urban areas?", "options": [{"key": "A", "text": "Volcanic eruptions"}, {"key": "B", "text": "Domestic sewage"}, {"key": "C", "text": "Wind erosion"}, {"key": "D", "text": "Forest fires"}], "answer": "B"},
+    {"module": "Module 3", "question": "Which of the following is a primary air pollutant?", "options": [{"key": "A", "text": "Ozone"}, {"key": "B", "text": "Peroxyacetyl nitrate (PAN)"}, {"key": "C", "text": "Carbon monoxide (CO)"}, {"key": "D", "text": "Sulphur trioxide (SO₃)"}], "answer": "C"},
+    {"module": "Module 3", "question": "Which gas causes acid rain?", "options": [{"key": "A", "text": "Methane"}, {"key": "B", "text": "Nitrogen"}, {"key": "C", "text": "Sulphur dioxide"}, {"key": "D", "text": "Hydrogen"}], "answer": "C"},
+    {"module": "Module 3", "question": "The safe permissible limit of noise in residential areas at night is:", "options": [{"key": "A", "text": "50 dB"}, {"key": "B", "text": "60 dB"}, {"key": "C", "text": "45 dB"}, {"key": "D", "text": "40 dB"}], "answer": "C"},
+    {"module": "Module 3", "question": "The international agreement to phase out ozone-depleting substances is:", "options": [{"key": "A", "text": "Kyoto Protocol"}, {"key": "B", "text": "Montreal Protocol"}, {"key": "C", "text": "Paris Agreement"}, {"key": "D", "text": "Earth Summit"}], "answer": "B"},
+    {"module": "Module 3", "question": "The major contributor to global warming is:", "options": [{"key": "A", "text": "Nitrogen"}, {"key": "B", "text": "Oxygen"}, {"key": "C", "text": "Carbon dioxide"}, {"key": "D", "text": "Helium"}], "answer": "C"},
+    {"module": "Module 3", "question": "Which protocol is related to the reduction of greenhouse gas emissions?", "options": [{"key": "A", "text": "Montreal Protocol"}, {"key": "B", "text": "Basel Convention"}, {"key": "C", "text": "Kyoto Protocol"}, {"key": "D", "text": "Minamata Convention"}], "answer": "C"},
+
+    // Sample Quiz Paper (20 comprehensive model questions)
+    {"module": "Sample Quiz", "question": "Which of the following represents an abiotic component of the environment?", "options": [{"key": "A", "text": "Plants"}, {"key": "B", "text": "Soil minerals"}, {"key": "C", "text": "Animals"}, {"key": "D", "text": "Fungi"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "The concept of sustainable development emphasizes:", "options": [{"key": "A", "text": "Fast industrialisation without limits"}, {"key": "B", "text": "Meeting present needs without compromising future generations"}, {"key": "C", "text": "Exploiting non-renewable resources quickly"}, {"key": "D", "text": "Total stoppage of economic growth"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Which zone of a lake receives ample sunlight allowing photosynthesis?", "options": [{"key": "A", "text": "Profundal zone"}, {"key": "B", "text": "Euphotic zone"}, {"key": "C", "text": "Abyssal zone"}, {"key": "D", "text": "Benthic zone"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "What is the primary indicator of organic contamination in municipal wastewater?", "options": [{"key": "A", "text": "Biochemical Oxygen Demand (BOD)"}, {"key": "B", "text": "pH value"}, {"key": "C", "text": "Turbidity"}, {"key": "D", "text": "Temperature"}], "answer": "A"},
+    {"module": "Sample Quiz", "question": "High concentrations of fluoride in drinking water cause:", "options": [{"key": "A", "text": "Goiter"}, {"key": "B", "text": "Scurvy"}, {"key": "C", "text": "Fluorosis"}, {"key": "D", "text": "Anemia"}], "answer": "C"},
+    {"module": "Sample Quiz", "question": "Which method is the most efficient agricultural practice to conserve water?", "options": [{"key": "A", "text": "Flood irrigation"}, {"key": "B", "text": "Drip irrigation"}, {"key": "C", "text": "Canal irrigation"}, {"key": "D", "text": "Sprinkler on sunny days"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "The greenhouse effect refers to:", "options": [{"key": "A", "text": "Cooling of Earth due to volcanic dust"}, {"key": "B", "text": "Trapping of heat by atmospheric greenhouse gases"}, {"key": "C", "text": "Cultivation of green plants inside glass chambers only"}, {"key": "D", "text": "Depletion of atmospheric nitrogen"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Which gas is primarily responsible for the discoloration of the Taj Mahal?", "options": [{"key": "A", "text": "Carbon dioxide"}, {"key": "B", "text": "Sulfur dioxide"}, {"key": "C", "text": "Ozone"}, {"key": "D", "text": "Methane"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Ozone depletion is primarily caused by which category of synthetic compounds?", "options": [{"key": "A", "text": "Chlorofluorocarbons (CFCs)"}, {"key": "B", "text": "Methane"}, {"key": "C", "text": "Carbon monoxide"}, {"key": "D", "text": "Nitrous oxide"}], "answer": "A"},
+    {"module": "Sample Quiz", "question": "Which of the following is considered an inexhaustible, renewable resource?", "options": [{"key": "A", "text": "Coal"}, {"key": "B", "text": "Crude oil"}, {"key": "C", "text": "Solar energy"}, {"key": "D", "text": "Natural gas"}], "answer": "C"},
+    {"module": "Sample Quiz", "question": "Noise pollution is generally measured in which unit?", "options": [{"key": "A", "text": "Hertz"}, {"key": "B", "text": "Decibel (dB)"}, {"key": "C", "text": "Lumen"}, {"key": "D", "text": "Watt"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Which Indian Act provides for prevention and control of water pollution?", "options": [{"key": "A", "text": "The Water Act, 1974"}, {"key": "B", "text": "The Forest Act, 1927"}, {"key": "C", "text": "The Air Act, 1981"}, {"key": "D", "text": "The Wildlife Act, 1972"}], "answer": "A"},
+    {"module": "Sample Quiz", "question": "Minamata disease is associated with toxic ingestion of:", "options": [{"key": "A", "text": "Lead"}, {"key": "B", "text": "Arsenic"}, {"key": "C", "text": "Mercury"}, {"key": "D", "text": "Cadmium"}], "answer": "C"},
+    {"module": "Sample Quiz", "question": "Which UN Sustainable Development Goal relates specifically to 'Affordable and Clean Energy'?", "options": [{"key": "A", "text": "SDG 3"}, {"key": "B", "text": "SDG 7"}, {"key": "C", "text": "SDG 11"}, {"key": "D", "text": "SDG 13"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Rainwater harvesting primarily aids in:", "options": [{"key": "A", "text": "Recharging aquifers and replenishing groundwater"}, {"key": "B", "text": "Creating floods"}, {"key": "C", "text": "Increasing ocean salinity"}, {"key": "D", "text": "Accelerating soil erosion"}], "answer": "A"},
+    {"module": "Sample Quiz", "question": "Which of the following processes breaks down hazardous municipal solid waste through controlled combustion?", "options": [{"key": "A", "text": "Composting"}, {"key": "B", "text": "Incineration"}, {"key": "C", "text": "Pyrolysis"}, {"key": "D", "text": "Vermiculture"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "What is the primary benefit of fuel cell vehicles powered by hydrogen?", "options": [{"key": "A", "text": "Zero tailpipe emissions except clean water vapor"}, {"key": "B", "text": "Extremely low initial cost"}, {"key": "C", "text": "Availability at any regular gas station"}, {"key": "D", "text": "Operates without oxygen"}], "answer": "A"},
+    {"module": "Sample Quiz", "question": "The Nalgonda technique is used to remove which chemical from drinking water?", "options": [{"key": "A", "text": "Arsenic"}, {"key": "B", "text": "Fluoride"}, {"key": "C", "text": "Nitrates"}, {"key": "D", "text": "Iron"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "Biological magnification causes toxins to become most concentrated in:", "options": [{"key": "A", "text": "Primary producers"}, {"key": "B", "text": "Top carnivores in the food chain"}, {"key": "C", "text": "Herbivores"}, {"key": "D", "text": "Decomposers"}], "answer": "B"},
+    {"module": "Sample Quiz", "question": "The global treaty designed to reduce emissions of greenhouse gases is known as the:", "options": [{"key": "A", "text": "Kyoto Protocol"}, {"key": "B", "text": "Ramsar Convention"}, {"key": "C", "text": "Basel Convention"}, {"key": "D", "text": "Bonn Agreement"}], "answer": "A"}
   ];
 
   const BANK = RAW_BANK.map(q => ({ ...q, question: cleanPrompt(q.question) }));
@@ -731,8 +692,8 @@
     if ($('evs-shuffle').checked) list = shuffle(list);
 
     const mode = $('evs-mode').value;
-    if (mode === 'random') list = shuffle(list).slice(0, 20);
-    else if (mode === '20' || mode === '10') list = list.slice(0, Number(mode));
+    if (mode === '20') list = list.slice(0, 20);
+    else if (mode === '10') list = list.slice(0, 10);
     
     return list;
   }
@@ -834,7 +795,6 @@
     $('evs-reviewCard').classList.remove('show');
     $('evs-resultCard').classList.add('show');
     
-    // Store all mistakes from this session
     lastMistakes = [];
     quiz.forEach((q, i) => {
       if (answers[i] !== undefined && answers[i] !== q.answer) {
@@ -855,8 +815,6 @@
     else $('evs-resultTitle').textContent = '📖 Revise notes and retry!';
 
     $('evs-resultText').textContent = `You finished with ${pct}% score. ${lastMistakes.length > 0 ? `You had ${lastMistakes.length} mistakes.` : 'Zero mistakes made!'}`;
-    
-    // Disable or enable Review Mistakes button
     $('evs-reviewBtn').disabled = (lastMistakes.length === 0);
   }
 
@@ -911,16 +869,13 @@
   $('evs-nextBtn').addEventListener('click', () => { if (index < quiz.length - 1) { index++; render(); } else finish(); });
   $('evs-againBtn').addEventListener('click', () => start(selectedBank()));
 
-  // Open review list
   $('evs-reviewBtn').addEventListener('click', showMistakesReview);
 
-  // Back from review to result
   $('evs-backToResultBtn').addEventListener('click', () => {
     $('evs-reviewCard').classList.remove('show');
     $('evs-resultCard').classList.add('show');
   });
 
-  // Retest mistakes
   $('evs-retestBtn').addEventListener('click', () => {
     const listToRetest = lastMistakes.map(m => m.question);
     start(listToRetest);
