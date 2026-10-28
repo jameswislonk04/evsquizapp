@@ -111,7 +111,7 @@
 
 #evs-quiz-root .main-body { padding: 24px 0 40px; }
 
-/* Stat Bar */
+/* Fixed Stat Bar - no overlap */
 #evs-quiz-root .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -486,15 +486,15 @@
 
   <div class="layout">
     <aside class="panel">
-      <h2>Build practice</h2>
+      <h2>Select Module</h2>
       
       <div class="field">
         <label for="evs-module">Choose Module</label>
         <select id="evs-module">
-          <option value="All">All modules (185 Questions)</option>
-          <option value="Module 1">Module 1 · Environment & Sustainability</option>
-          <option value="Module 2">Module 2 · Natural Resources & Energy</option>
-          <option value="Module 3">Module 3 · Pollution & Global Issues</option>
+          <option value="All">All modules (185 questions)</option>
+          <option value="Module 1">Module 1 · Environment & Sustainability (65)</option>
+          <option value="Module 2">Module 2 · Natural Resources & Energy (60)</option>
+          <option value="Module 3">Module 3 · Pollution & Global Issues (60)</option>
         </select>
       </div>
 
@@ -574,7 +574,7 @@
   const cleanPrompt = (q) => q.replace(/\s*[a-d]\)\s*.*$/i, '').trim();
 
   const RAW_BANK = [
-    // MODULE 1 (65 Questions)
+    // MODULE 1 (65 questions)
     {"module": "Module 1", "question": "What are the two main components of the environment?", "options": [{"key": "A", "text": "Water and Air"}, {"key": "B", "text": "Biotic and Abiotic"}, {"key": "C", "text": "Plants and Animals"}, {"key": "D", "text": "Soil and Water"}], "answer": "B"},
     {"module": "Module 1", "question": "The layer of gases surrounding the Earth is called the:", "options": [{"key": "A", "text": "Lithosphere"}, {"key": "B", "text": "Hydrosphere"}, {"key": "C", "text": "Atmosphere"}, {"key": "D", "text": "Biosphere"}], "answer": "C"},
     {"module": "Module 1", "question": "Which of the following is a biotic component?", "options": [{"key": "A", "text": "Sunlight"}, {"key": "B", "text": "Water"}, {"key": "C", "text": "Bacteria"}, {"key": "D", "text": "Rocks"}], "answer": "C"},
@@ -641,7 +641,7 @@
     {"module": "Module 1", "question": "Possible actions to support SDG 6 include:", "options": [{"key": "A", "text": "Promoting water wastage"}, {"key": "B", "text": "Building open drains"}, {"key": "C", "text": "Reusing and conserving water"}, {"key": "D", "text": "Ignoring sewage treatment"}], "answer": "C"},
     {"module": "Module 1", "question": "One major goal of SDG 15 (Life on Land) is to:", "options": [{"key": "A", "text": "Promote urbanisation"}, {"key": "B", "text": "Prevent overfishing"}, {"key": "C", "text": "Combat desertification and halt biodiversity loss"}, {"key": "D", "text": "Increase mining operations"}], "answer": "C"},
 
-    // MODULE 2 (60 Questions)
+    // MODULE 2 (60 questions)
     {"module": "Module 2", "question": "What percentage of Earth's water is freshwater?", "options": [{"key": "A", "text": "50%"}, {"key": "B", "text": "30%"}, {"key": "C", "text": "2.5%"}, {"key": "D", "text": "10%"}], "answer": "C"},
     {"module": "Module 2", "question": "Which river is not part of the Indian river system?", "options": [{"key": "A", "text": "Ganga"}, {"key": "B", "text": "Nile"}, {"key": "C", "text": "Krishna"}, {"key": "D", "text": "Godavari"}], "answer": "B"},
     {"module": "Module 2", "question": "The ideal pH of drinking water should be:", "options": [{"key": "A", "text": "5.5"}, {"key": "B", "text": "6.5–8.5"}, {"key": "C", "text": "9.0"}, {"key": "D", "text": "10.5"}], "answer": "B"},
@@ -703,7 +703,7 @@
     {"module": "Module 2", "question": "The biggest challenge in hydrogen fuel technology is:", "options": [{"key": "A", "text": "Its color"}, {"key": "B", "text": "High CO₂ emission"}, {"key": "C", "text": "Storage and transportation"}, {"key": "D", "text": "Abundance"}], "answer": "C"},
     {"module": "Module 2", "question": "Hydrogen can be obtained from:", "options": [{"key": "A", "text": "Soil"}, {"key": "B", "text": "Sunlight directly"}, {"key": "C", "text": "Fossil fuels and water"}, {"key": "D", "text": "Wood only"}], "answer": "C"},
 
-    // MODULE 3 (60 Questions)
+    // MODULE 3 (60 questions)
     {"module": "Module 3", "question": "What is the most common cause of water pollution in urban areas?", "options": [{"key": "A", "text": "Volcanic eruptions"}, {"key": "B", "text": "Domestic sewage"}, {"key": "C", "text": "Wind erosion"}, {"key": "D", "text": "Forest fires"}], "answer": "B"},
     {"module": "Module 3", "question": "Which of the following is a biological pollutant of water?", "options": [{"key": "A", "text": "Lead"}, {"key": "B", "text": "Mercury"}, {"key": "C", "text": "Escherichia coli"}, {"key": "D", "text": "Nitrate"}], "answer": "C"},
     {"module": "Module 3", "question": "Eutrophication is mainly caused by the presence of:", "options": [{"key": "A", "text": "Radioactive substances"}, {"key": "B", "text": "Oil spills"}, {"key": "C", "text": "Excess nitrates and phosphates"}, {"key": "D", "text": "Organic acids"}], "answer": "C"},
